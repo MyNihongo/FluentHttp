@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNihongo.HttpService.Tests
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD657C11-17F5-404A-AD80-4FDD082AE8AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNihongo.HttpService.Tests.Unit", "tests\MyNihongo.HttpService.Tests.Unit\MyNihongo.HttpService.Tests.Unit.csproj", "{A3C21CFE-3FF3-47CB-A844-2ABF88D5EEDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +25,17 @@ Global
 		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3C21CFE-3FF3-47CB-A844-2ABF88D5EEDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3C21CFE-3FF3-47CB-A844-2ABF88D5EEDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3C21CFE-3FF3-47CB-A844-2ABF88D5EEDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3C21CFE-3FF3-47CB-A844-2ABF88D5EEDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625} = {FD657C11-17F5-404A-AD80-4FDD082AE8AA}
+		{A3C21CFE-3FF3-47CB-A844-2ABF88D5EEDB} = {FD657C11-17F5-404A-AD80-4FDD082AE8AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {267E0938-5E53-438E-93A6-C7693AA29F9E}

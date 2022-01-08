@@ -5,12 +5,12 @@ namespace MyNihongo.HttpService;
 public static class HttpServiceWithOptionsEx
 {
 	/// <inheritdoc cref="IHttpService.GetJsonAsync{T}"/>
-	public static Task<TResult> GetJsonAsync<TResult>(this IHttpServiceWithOptions @this, HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
-		@this.HttpService.GetJsonAsync(options, resultTypeInfo, ct);
+	public static Task<TResult> GetJsonAsync<TResult>(this IHttpServiceWithOptions @this, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
+		@this.HttpService.GetJsonAsync(@this.Options, resultTypeInfo, ct);
 
 	/// <inheritdoc cref="IHttpService.PostJsonAsync{T,T}"/>
-	public static Task<TResult> PostJsonAsync<TSource, TResult>(this IHttpServiceWithOptions @this, TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
-		@this.HttpService.PostJsonAsync(source, options, sourceTypeInfo, resultTypeInfo, ct);
+	public static Task<TResult> PostJsonAsync<TSource, TResult>(this IHttpServiceWithOptions @this, TSource source, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
+		@this.HttpService.PostJsonAsync(source, @this.Options, sourceTypeInfo, resultTypeInfo, ct);
 
 	/// <inheritdoc cref="HttpServiceEx.AppendPathSegment"/>
 	public static IHttpServiceWithOptions AppendPathSegment(this IHttpServiceWithOptions @this, string pathSegment)
