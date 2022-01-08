@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.ObjectPool;
 
-namespace MyNihongo.HttpService;
+namespace MyNihongo.FluentHttp;
 
 internal static class StringEx
 {

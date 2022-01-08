@@ -3,8 +3,9 @@ using System.Text;
 using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MyNihongo.FluentHttp;
 
-namespace MyNihongo.HttpService;
+namespace MyNihongo.FluentHttp;
 
 internal sealed class DefaultHttpService : IHttpService
 {

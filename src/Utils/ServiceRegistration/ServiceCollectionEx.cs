@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MyNihongo.HttpService;
+namespace MyNihongo.FluentHttp;
 
 public static class ServiceCollectionEx
 {

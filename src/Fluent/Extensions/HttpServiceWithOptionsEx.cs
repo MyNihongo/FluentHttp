@@ -1,6 +1,7 @@
 ﻿using System.Text.Json.Serialization.Metadata;
+using MyNihongo.FluentHttp;
 
-namespace MyNihongo.HttpService;
+namespace MyNihongo.FluentHttp;
 
 public static class HttpServiceWithOptionsEx
 {

@@ -1,4 +1,4 @@
-﻿namespace MyNihongo.HttpService.Tests.Unit;
+﻿namespace MyNihongo.FluentHttp.Tests.Unit;
 
 internal sealed record RequestRecord
 {

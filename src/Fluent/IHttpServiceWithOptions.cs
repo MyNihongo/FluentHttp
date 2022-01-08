@@ -1,4 +1,4 @@
-﻿namespace MyNihongo.HttpService;
+﻿namespace MyNihongo.FluentHttp;
 
 public interface IHttpServiceWithOptions
 {

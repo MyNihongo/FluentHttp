@@ -5,7 +5,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace MyNihongo.HttpService.Tests.Integration.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Integration.HttpServiceTests;
 
 public abstract class HttpServiceTestsBase
 {

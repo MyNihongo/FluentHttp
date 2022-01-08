@@ -1,9 +1,9 @@
-[![Version](https://img.shields.io/nuget/v/MyNihongo.HttpService?style=plastic)](https://www.nuget.org/packages/MyNihongo.HttpService/)
-[![Nuget downloads](https://img.shields.io/nuget/dt/MyNihongo.HttpService?label=nuget%20downloads&logo=nuget&style=plastic)](https://www.nuget.org/packages/MyNihongo.HttpService/)   
+[![Version](https://img.shields.io/nuget/v/MyNihongo.FluentHttp?style=plastic)](https://www.nuget.org/packages/MyNihongo.FluentHttp/)
+[![Nuget downloads](https://img.shields.io/nuget/dt/MyNihongo.FluentHttp?label=nuget%20downloads&logo=nuget&style=plastic)](https://www.nuget.org/packages/MyNihongo.FluentHttp/)   
 
 # HttpService
 Fluent wrapper around IHttpClientFactory  
-Install a NuGet package `MyNihongo.HttpService`.
+Install a NuGet package `MyNihongo.FluentHttp`.
 
 ## Configuration
 Add a section to `IConfiguration`
@@ -17,7 +17,7 @@ Add a section to `IConfiguration`
 ```
 Register a service
 ```cs
-using MyNihongo.HttpService;
+using MyNihongo.FluentHttp;
 
 services.AddHttpService();
 ```

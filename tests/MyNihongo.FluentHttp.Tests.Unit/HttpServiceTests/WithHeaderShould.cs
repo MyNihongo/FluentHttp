@@ -2,19 +2,19 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyNihongo.HttpService.Tests.Unit.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Unit.HttpServiceTests;
 
-public sealed class AppendPathSegmentShould : HttpServiceTestsBase
+public sealed class WithHeaderShould : HttpServiceTestsBase
 {
 	[Fact]
-	public async Task AppendSingleSegment()
+	public async Task AddSingleHeader()
 	{
-		const string pathSegment = nameof(pathSegment);
+		const string header = nameof(header), value = nameof(value);
 		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
-			PathSegments = { pathSegment }
+			Headers = { { header, value } }
 		};
 
 		var req = new RequestRecord
@@ -23,23 +23,22 @@ public sealed class AppendPathSegmentShould : HttpServiceTestsBase
 		};
 
 		await CreateFixture()
-			.AppendPathSegment(pathSegment)
+			.WithHeader(header, value)
 			.PostJsonAsync<RequestRecord, ResponseRecord>(req, ct: cts.Token);
 
 		VerifyPost(req, expectedOptions, cts.Token);
 	}
 
 	[Fact]
-	public async Task AppendMultipleSegments()
+	public async Task AddMultipleHeaders()
 	{
-		const string pathSegment1 = nameof(pathSegment1),
-			pathSegment2 = nameof(pathSegment2),
-			pathSegment3 = nameof(pathSegment3);
+		const string header1 = nameof(header1), value1 = nameof(value1),
+			header2 = nameof(header2), value2 = nameof(value2);
 		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
-			PathSegments = { pathSegment1, pathSegment2, pathSegment3 }
+			Headers = { { header1, value1 }, { header2, value2 } }
 		};
 
 		var req = new RequestRecord
@@ -48,9 +47,8 @@ public sealed class AppendPathSegmentShould : HttpServiceTestsBase
 		};
 
 		await CreateFixture()
-			.AppendPathSegment(pathSegment1)
-			.AppendPathSegment(pathSegment2)
-			.AppendPathSegment(pathSegment3)
+			.WithHeader(header1, value1)
+			.WithHeader(header2, value2)
 			.PostJsonAsync<RequestRecord, ResponseRecord>(req, ct: cts.Token);
 
 		VerifyPost(req, expectedOptions, cts.Token);

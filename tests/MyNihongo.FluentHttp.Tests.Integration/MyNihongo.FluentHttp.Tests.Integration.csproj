@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\MyNihongo.HttpService.csproj" />
+	  <ProjectReference Include="..\..\src\MyNihongo.FluentHttp.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNihongo.FluentHttp", "src\MyNihongo.FluentHttp.csproj", "{0DDAC867-28E1-488F-AF17-D2952D7CD300}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD657C11-17F5-404A-AD80-4FDD082AE8AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNihongo.FluentHttp.Tests.Integration", "tests\MyNihongo.FluentHttp.Tests.Integration\MyNihongo.FluentHttp.Tests.Integration.csproj", "{70C004DE-CD00-4B8A-836F-1D6C1F3F4F86}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNihongo.FluentHttp.Tests.Unit", "tests\MyNihongo.FluentHttp.Tests.Unit\MyNihongo.FluentHttp.Tests.Unit.csproj", "{BA6228EB-06A5-40FC-AA34-8F4DC423DD6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DDAC867-28E1-488F-AF17-D2952D7CD300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DDAC867-28E1-488F-AF17-D2952D7CD300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DDAC867-28E1-488F-AF17-D2952D7CD300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DDAC867-28E1-488F-AF17-D2952D7CD300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70C004DE-CD00-4B8A-836F-1D6C1F3F4F86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70C004DE-CD00-4B8A-836F-1D6C1F3F4F86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70C004DE-CD00-4B8A-836F-1D6C1F3F4F86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70C004DE-CD00-4B8A-836F-1D6C1F3F4F86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA6228EB-06A5-40FC-AA34-8F4DC423DD6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA6228EB-06A5-40FC-AA34-8F4DC423DD6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA6228EB-06A5-40FC-AA34-8F4DC423DD6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA6228EB-06A5-40FC-AA34-8F4DC423DD6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{70C004DE-CD00-4B8A-836F-1D6C1F3F4F86} = {FD657C11-17F5-404A-AD80-4FDD082AE8AA}
+		{BA6228EB-06A5-40FC-AA34-8F4DC423DD6B} = {FD657C11-17F5-404A-AD80-4FDD082AE8AA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {267E0938-5E53-438E-93A6-C7693AA29F9E}
+	EndGlobalSection
+EndGlobal
