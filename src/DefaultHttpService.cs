@@ -30,9 +30,13 @@ internal sealed class DefaultHttpService : IHttpService
 			.ConfigureAwait(false);
 	}
 
-	public Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
+	public async Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
 	{
-		throw new NotImplementedException();
+		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, ct)
+			.ConfigureAwait(false);
+
+		return await GetResponseAsync(req, resultTypeInfo, ct)
+			.ConfigureAwait(false);
 	}
 
 	private HttpRequestMessage CreateRequest(HttpMethod method, HttpCallOptions options)
