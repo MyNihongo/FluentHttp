@@ -14,6 +14,8 @@
 		<PackageReleaseNotes>https://github.com/MyNihongo/HttpService/releases</PackageReleaseNotes>
 		<PackageTags>http, httpclient, httpclientfactory, fluent</PackageTags>
 		<GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+		<PackageIcon>favico.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -25,6 +27,17 @@
 
 	<ItemGroup>
 		<None Remove="*.csproj.DotSettings" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\favico.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>
