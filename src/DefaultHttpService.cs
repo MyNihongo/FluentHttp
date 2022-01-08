@@ -25,6 +25,9 @@ internal sealed class DefaultHttpService : IHttpService
 	public async Task<TResult> GetJsonAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
+
+		return await GetResponseAsync(req, resultTypeInfo, ct)
+			.ConfigureAwait(false);
 	}
 
 	public Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
@@ -32,10 +35,17 @@ internal sealed class DefaultHttpService : IHttpService
 		throw new NotImplementedException();
 	}
 
-	private static HttpRequestMessage CreateRequest(HttpMethod method, HttpCallOptions options)
+	private HttpRequestMessage CreateRequest(HttpMethod method, HttpCallOptions options)
 	{
 		var uri = options.CreateUri();
-		return new HttpRequestMessage(method, uri);
+
+		if (_logger.IsEnabled(LogLevel.Trace))
+		{
+			var absoluteUrl = _configuration.CreateAbsoluteUrl(uri);
+			_logger.LogTrace("-REQUEST-\nMethod: {Method}\nURL: {Url}", method, absoluteUrl);
+		}
+
+		return CreateRequest(method, uri, options);
 	}
 
 	private async Task<HttpRequestMessage> CreateRequestAsync<T>(HttpMethod method, HttpCallOptions options, T data, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
@@ -49,7 +59,7 @@ internal sealed class DefaultHttpService : IHttpService
 			content = new StringContent(stringData);
 
 			var absoluteUrl = _configuration.CreateAbsoluteUrl(uri);
-			_logger.LogTrace("Method: {Method}\nURL: {Url}\nContent: {Content}", method, absoluteUrl, stringData);
+			_logger.LogTrace("-REQUEST-\nMethod: {Method}\nURL: {Url}\nContent: {Content}", method, absoluteUrl, stringData);
 		}
 		else
 		{
@@ -60,16 +70,66 @@ internal sealed class DefaultHttpService : IHttpService
 			content = new StreamContent(stream);
 		}
 
-		var request = new HttpRequestMessage(method, uri)
-		{
-			Content = content
-		};
-
-		request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json")
+		var req = CreateRequest(method, uri, options);
+		req.Content = content;
+		req.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json")
 		{
 			CharSet = Encoding.UTF8.WebName
 		};
 
-		return request;
+		return req;
+	}
+
+	private static HttpRequestMessage CreateRequest(in HttpMethod method, in Uri uri, in HttpCallOptions options)
+	{
+		var req = new HttpRequestMessage(method, uri);
+
+		foreach (var (key, value) in options.Headers)
+			req.Headers.Add(key, value);
+
+		return req;
+	}
+
+	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
+	{
+		var url = req.RequestUri?.AbsoluteUri;
+
+		// Do not dispose
+		var httpClient = _factory.CreateClient(Const.FactoryName);
+
+		using var res = await httpClient.SendAsync(req, ct)
+			.ConfigureAwait(false);
+
+		await using var stream = await res.Content
+			.ReadAsStreamAsync(ct)
+			.ConfigureAwait(false);
+
+		if (res.IsSuccessStatusCode)
+		{
+			if (_logger.IsEnabled(LogLevel.Trace))
+			{
+				var stringData = await stream.ReadToEndAsync()
+					.ConfigureAwait(false);
+
+				_logger.LogTrace("-RESPONSE-\nURL: {Url}\nContent: {Content}", url, stringData);
+
+				return stringData.Deserialize(jsonTypeInfo);
+			}
+
+			return await stream.DeserializeAsync(jsonTypeInfo, ct)
+				.ConfigureAwait(false);
+		}
+
+		var errorContent = string.Empty;
+
+		if (stream.Length != 0)
+		{
+			errorContent = await stream.ReadToEndAsync()
+				.ConfigureAwait(false);
+
+			_logger.LogTrace("-RESPONSE ERROR-\nURL: {Url}\nContent: {Content}", url, errorContent);
+		}
+
+		throw new HttpCallException(res.StatusCode, errorContent);
 	}
 }

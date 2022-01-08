@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.ObjectPool;
 
 namespace MyNihongo.HttpService;
@@ -15,4 +17,13 @@ internal static class StringEx
 
 	public static bool ToBool(this string? @this) =>
 		"true".Equals(@this, StringComparison.OrdinalIgnoreCase);
+
+	public static T Deserialize<T>(this string @this, JsonTypeInfo<T>? jsonTypeInfo = null)
+	{
+		var obj = jsonTypeInfo != null
+			? JsonSerializer.Deserialize(@this, jsonTypeInfo)
+			: JsonSerializer.Deserialize<T>(@this);
+
+		return obj ?? throw new NullReferenceException("Cannot deserialize");
+	}
 }
