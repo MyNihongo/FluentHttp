@@ -1,7 +1,7 @@
 [![Version](https://img.shields.io/nuget/v/MyNihongo.FluentHttp?style=plastic)](https://www.nuget.org/packages/MyNihongo.FluentHttp/)
 [![Nuget downloads](https://img.shields.io/nuget/dt/MyNihongo.FluentHttp?label=nuget%20downloads&logo=nuget&style=plastic)](https://www.nuget.org/packages/MyNihongo.FluentHttp/)   
 
-# HttpService
+# FluentHttp
 Fluent wrapper around IHttpClientFactory  
 Install a NuGet package `MyNihongo.FluentHttp`.
 
@@ -9,7 +9,7 @@ Install a NuGet package `MyNihongo.FluentHttp`.
 Add a section to `IConfiguration`
 ```json
 {
-	"HttpClient": {
+	"FluentHttp": {
 		"BaseAddress": "https://jsonplaceholder.typicode.com",
 		"NtlmEnabled": false
 	} 
@@ -19,12 +19,12 @@ Register a service
 ```cs
 using MyNihongo.FluentHttp;
 
-services.AddHttpService();
+services.AddFluentHttp();
 ```
 
 ## HTTP methods
 To optimize JSON serialization `JsonTypeInfo<T>` can be supplied for all methods. More info about these types [here](https://devblogs.microsoft.com/dotnet/try-the-new-system-text-json-source-generator/).  
-In further examples a variable `IHttpService httpService` will be used.  
+In further examples a variable `IFluentHttp fluentHttp` will be used.  
 
 #### GetJsonAsync
 Gets a JSON stream.
@@ -38,7 +38,7 @@ public sealed record RecordContext
 }
 
 // Get the model
-var models = await httpService
+var models = await fluentHttp
 	.AppendPathSegment("example")
 	.GetJsonAsync(RecordContext.Default.RecordArray, ct);
 ```
@@ -57,7 +57,7 @@ var req = new Request
 	Data = "example"
 };
 
-var response = await httpService
+var response = await fluentHttp
 	.AppendPathSegment("example")
 	.PostJsonAsync(req, RequestContext.Default.Request, ResponseContext.Default.Response, ct);
 ```
@@ -69,7 +69,7 @@ Fluent extensions supply additional parameters for the main HTTP methods.
 Appends a new section to the request URI.
 ```cs
 // get from https://jsonplaceholder.typicode.com/posts
-var result = await httpService
+var result = await fluentHttp
 	.AppendPathSegment("posts")
 	.GetJsonAsync<PostRecord>();
 ```
@@ -78,7 +78,7 @@ var result = await httpService
 Appends multiple sections to the request URI.
 ```cs
 // get from https://jsonplaceholder.typicode.com/posts/1/comments
-var result = await httpService
+var result = await fluentHttp
 	.AppendPathSegment("posts", "1", "comments")
 	.GetJsonAsync<PostCommentRecord>();
 ```
@@ -86,7 +86,7 @@ var result = await httpService
 #### WithHeader
 Appends a header to the request.
 ```cs
-var result = await httpService
+var result = await fluentHttp
 	.AppendPathSegment("posts")
 	.WithHeader("my-header", "value")
 	.GetJsonAsync<PostRecord>();

@@ -2,7 +2,7 @@
 
 internal static class ConfigKeys
 {
-	public const string Section = "HttpClient",
+	public const string Section = "FluentHttp",
 		BaseAddress = "BaseAddress",
 		UseNtlmAuthentication = "NtlmEnabled";
 }

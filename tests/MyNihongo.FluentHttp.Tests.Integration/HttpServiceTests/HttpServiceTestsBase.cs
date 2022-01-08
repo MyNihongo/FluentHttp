@@ -28,7 +28,7 @@ public abstract class HttpServiceTestsBase
 		_serviceProvider = new ServiceCollection()
 			.AddLogging(x => x.AddSerilog(serilogLogger))
 			.AddSingleton<IConfiguration>(configuration)
-			.AddHttpService()
+			.AddFluentHttp()
 			.BuildServiceProvider(true);
 	}
 

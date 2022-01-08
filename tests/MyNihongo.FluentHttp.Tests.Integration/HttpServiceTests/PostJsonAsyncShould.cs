@@ -35,7 +35,7 @@ public sealed class PostJsonAsyncShould : HttpServiceTestsBase
 	}
 
 	[Fact]
-	public async Task PostDaaWithoutVerboseLogging()
+	public async Task PostDataWithoutVerboseLogging()
 	{
 		LogLevel = LogEventLevel.Information;
 

@@ -6,7 +6,7 @@ namespace MyNihongo.FluentHttp;
 
 public static class ServiceCollectionEx
 {
-	public static IServiceCollection AddHttpService(this IServiceCollection @this)
+	public static IServiceCollection AddFluentHttp(this IServiceCollection @this)
 	{
 		@this
 			.AddHttpClient(Const.FactoryName)
