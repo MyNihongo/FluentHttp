@@ -94,6 +94,7 @@ internal sealed class DefaultHttpService : IHttpService
 	{
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
+		var url = httpClient.BaseAddress.GetAbsoluteUri(req.RequestUri);
 
 		using var res = await httpClient.SendAsync(req, ct)
 			.ConfigureAwait(false);
