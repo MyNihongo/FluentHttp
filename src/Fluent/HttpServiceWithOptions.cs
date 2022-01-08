@@ -1,4 +1,4 @@
-﻿namespace MyNihongo.HttpService;
+﻿namespace MyNihongo.FluentHttp;
 
 internal sealed class HttpServiceWithOptions : IHttpServiceWithOptions
 {

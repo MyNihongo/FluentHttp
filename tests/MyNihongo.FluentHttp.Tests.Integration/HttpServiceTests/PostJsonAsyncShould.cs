@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
 using System.Threading.Tasks;
-using MyNihongo.HttpService.Tests.Integration.Models;
+using MyNihongo.FluentHttp.Tests.Integration.Models;
 using Serilog.Events;
 using Xunit;
 
-namespace MyNihongo.HttpService.Tests.Integration.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Integration.HttpServiceTests;
 
 public sealed class PostJsonAsyncShould : HttpServiceTestsBase
 {
@@ -35,7 +35,7 @@ public sealed class PostJsonAsyncShould : HttpServiceTestsBase
 	}
 
 	[Fact]
-	public async Task PostDaaWithoutVerboseLogging()
+	public async Task PostDataWithoutVerboseLogging()
 	{
 		LogLevel = LogEventLevel.Information;
 

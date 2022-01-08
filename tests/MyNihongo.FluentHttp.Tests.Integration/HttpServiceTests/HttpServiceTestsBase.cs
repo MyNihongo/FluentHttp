@@ -5,7 +5,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace MyNihongo.HttpService.Tests.Integration.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Integration.HttpServiceTests;
 
 public abstract class HttpServiceTestsBase
 {
@@ -28,7 +28,7 @@ public abstract class HttpServiceTestsBase
 		_serviceProvider = new ServiceCollection()
 			.AddLogging(x => x.AddSerilog(serilogLogger))
 			.AddSingleton<IConfiguration>(configuration)
-			.AddHttpService()
+			.AddFluentHttp()
 			.BuildServiceProvider(true);
 	}
 

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization.Metadata;
 
-namespace MyNihongo.HttpService;
+namespace MyNihongo.FluentHttp;
 
 public interface IHttpService
 {

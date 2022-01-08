@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using Moq;
 
-namespace MyNihongo.HttpService.Tests.Unit.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Unit.HttpServiceTests;
 
 public abstract class HttpServiceTestsBase
 {

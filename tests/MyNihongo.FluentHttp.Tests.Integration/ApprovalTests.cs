@@ -2,7 +2,7 @@
 using System.Text.Json;
 using ApprovalTests;
 
-namespace MyNihongo.HttpService.Tests.Integration;
+namespace MyNihongo.FluentHttp.Tests.Integration;
 
 internal static class ApprovalTests
 {

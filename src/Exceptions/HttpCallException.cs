@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace MyNihongo.HttpService;
+namespace MyNihongo.FluentHttp;
 
 public sealed class HttpCallException : Exception
 {

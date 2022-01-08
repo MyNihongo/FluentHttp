@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MyNihongo.HttpService.Tests.Integration.Models;
+namespace MyNihongo.FluentHttp.Tests.Integration.Models;
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(PostRecord[]))]

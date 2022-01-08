@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization.Metadata;
 
-namespace MyNihongo.HttpService;
+namespace MyNihongo.FluentHttp;
 
 internal static class ObjectEx
 {
