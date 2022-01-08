@@ -10,13 +10,13 @@ internal static class ObjectEx
 			? JsonSerializer.Serialize(@this, jsonTypeInfo)
 			: JsonSerializer.Serialize(@this);
 
-	public static async Task<Stream> SerializeAsync<T>(this T @this, JsonSerializerOptions options, JsonTypeInfo<T>? jsonTypeInfo = null, CancellationToken ct = default)
+	public static async Task<Stream> SerializeAsync<T>(this T @this, JsonTypeInfo<T>? jsonTypeInfo = null, CancellationToken ct = default)
 	{
 		var stream = new MemoryStream();
 
 		var task = jsonTypeInfo != null
 			? JsonSerializer.SerializeAsync(stream, @this, jsonTypeInfo, ct)
-			: JsonSerializer.SerializeAsync(stream, @this, options, ct);
+			: JsonSerializer.SerializeAsync(stream, @this, cancellationToken: ct);
 
 		await task.ConfigureAwait(false);
 
