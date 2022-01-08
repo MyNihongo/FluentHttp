@@ -25,4 +25,11 @@ public static class HttpServiceWithOptionsEx
 		@this.Options.PathSegments.AddRange(pathSegments);
 		return @this;
 	}
+
+	/// <inheritdoc cref="HttpServiceEx.WithHeader"/>
+	public static IHttpServiceWithOptions WithHeader(this IHttpServiceWithOptions @this, string header, string value)
+	{
+		@this.Options.Headers.Add(header, value);
+		return @this;
+	}
 }

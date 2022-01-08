@@ -10,7 +10,7 @@ internal static class StringEx
 	private static readonly ObjectPool<StringBuilder> StringBuilderPool = new DefaultObjectPoolProvider()
 		.CreateStringBuilderPool();
 
-	public static string Join(this string[] @this, char separator) =>
+	public static string Join(this IEnumerable<string> @this, char separator) =>
 		StringBuilderPool.Get()
 			.AppendJoin(separator, @this)
 			.ToString();

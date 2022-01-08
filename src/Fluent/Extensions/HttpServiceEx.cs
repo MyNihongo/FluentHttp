@@ -18,4 +18,16 @@ public static class HttpServiceEx
 
 		return result;
 	}
+
+	public static IHttpServiceWithOptions WithHeader(this IHttpService @this, string header, string value) =>
+		new HttpServiceWithOptions(@this)
+		{
+			Options = new HttpCallOptions
+			{
+				Headers =
+				{
+					{ header, value }
+				}
+			}
+		};
 }
