@@ -1,0 +1,15 @@
+﻿using Microsoft.Extensions.Configuration;
+
+namespace MyNihongo.HttpService;
+
+internal static class ConfigurationEx
+{
+	public static string CreateAbsoluteUrl(this IConfiguration @this, Uri relative)
+	{
+		var baseUrl = @this[$"{ConfigKeys.Section}:{ConfigKeys.BaseAddress}"];
+		var uri = new Uri(baseUrl, UriKind.Absolute);
+		uri = new Uri(uri, relative);
+
+		return uri.AbsoluteUri;
+	}
+}
