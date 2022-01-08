@@ -5,14 +5,14 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 
-namespace MyNihongo.FluentHttp.Tests.Integration.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 
-public abstract class HttpServiceTestsBase
+public abstract class FluentHttpTestsBase
 {
 	private readonly IServiceProvider _serviceProvider;
 	private readonly LoggingLevelSwitch _loggingLevelSwitch = new(LogEventLevel.Verbose);
 
-	protected HttpServiceTestsBase()
+	protected FluentHttpTestsBase()
 	{
 		var serilogLogger = new LoggerConfiguration()
 			.Enrich.FromLogContext()
@@ -37,6 +37,6 @@ public abstract class HttpServiceTestsBase
 		set => _loggingLevelSwitch.MinimumLevel = value;
 	}
 
-	protected IHttpService CreateFixture() =>
-		_serviceProvider.GetRequiredService<IHttpService>();
+	protected IFluentHttp CreateFixture() =>
+		_serviceProvider.GetRequiredService<IFluentHttp>();
 }

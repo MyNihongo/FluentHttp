@@ -1,8 +1,8 @@
 ﻿namespace MyNihongo.FluentHttp;
 
-public interface IHttpServiceWithOptions
+public interface IFluentHttpWithOptions
 {
-	internal IHttpService HttpService { get; }
+	internal IFluentHttp Http { get; }
 
 	internal HttpCallOptions Options { get; set; }
 }
