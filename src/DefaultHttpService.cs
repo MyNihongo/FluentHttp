@@ -92,8 +92,6 @@ internal sealed class DefaultHttpService : IHttpService
 
 	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
 	{
-		var url = req.RequestUri?.AbsoluteUri;
-
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
 

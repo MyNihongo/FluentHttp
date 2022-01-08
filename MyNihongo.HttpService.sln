@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNihongo.HttpService", "src\MyNihongo.HttpService.csproj", "{0DDAC867-28E1-488F-AF17-D2952D7CD300}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNihongo.HttpService", "src\MyNihongo.HttpService.csproj", "{0DDAC867-28E1-488F-AF17-D2952D7CD300}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyNihongo.HttpService.Tests.Integration", "tests\MyNihongo.HttpService.Tests.Integration\MyNihongo.HttpService.Tests.Integration.csproj", "{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD657C11-17F5-404A-AD80-4FDD082AE8AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{0DDAC867-28E1-488F-AF17-D2952D7CD300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DDAC867-28E1-488F-AF17-D2952D7CD300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DDAC867-28E1-488F-AF17-D2952D7CD300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AC82EE62-0AB1-4F45-8853-CC2B6C6B1625} = {FD657C11-17F5-404A-AD80-4FDD082AE8AA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {267E0938-5E53-438E-93A6-C7693AA29F9E}

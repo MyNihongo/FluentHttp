@@ -6,10 +6,10 @@ internal static class ConfigurationEx
 {
 	public static string CreateAbsoluteUrl(this IConfiguration @this, Uri relative)
 	{
-		var baseUri = @this[$"{ConfigKeys.Section}:{ConfigKeys.BaseAddress}"];
+		var baseUrl = @this[$"{ConfigKeys.Section}:{ConfigKeys.BaseAddress}"];
+		var uri = new Uri(baseUrl, UriKind.Absolute);
+		uri = new Uri(uri, relative);
 
-		return !string.IsNullOrEmpty(baseUri)
-			? baseUri + Const.UriSeparator + relative.AbsolutePath
-			: relative.AbsolutePath;
+		return uri.AbsoluteUri;
 	}
 }
