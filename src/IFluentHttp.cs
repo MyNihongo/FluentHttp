@@ -2,7 +2,7 @@
 
 namespace MyNihongo.FluentHttp;
 
-public interface IHttpService
+public interface IFluentHttp
 {
 	/// <exception cref="HttpCallException"></exception>
 	Task<TResult> GetJsonAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default);
