@@ -34,6 +34,6 @@ public static class ServiceCollectionEx
 				return handler;
 			});
 
-		return @this.AddSingleton<IHttpService, DefaultHttpService>();
+		return @this.AddSingleton<IFluentHttp, DefaultFluentHttp>();
 	}
 }

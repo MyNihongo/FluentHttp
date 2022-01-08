@@ -4,9 +4,9 @@ using MyNihongo.FluentHttp.Tests.Integration.Models;
 using Serilog.Events;
 using Xunit;
 
-namespace MyNihongo.FluentHttp.Tests.Integration.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 
-public sealed class PostJsonAsyncShould : HttpServiceTestsBase
+public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 {
 	[Fact]
 	public async Task PostDataWithVerboseLogging()
