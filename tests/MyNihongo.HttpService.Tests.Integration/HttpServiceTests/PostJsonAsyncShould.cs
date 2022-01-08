@@ -13,7 +13,7 @@ public sealed class PostJsonAsyncShould : HttpServiceTestsBase
 	{
 		var options = new HttpCallOptions
 		{
-			PathSegments = new[] { "posts" }
+			PathSegments = { "posts" }
 		};
 
 		var data = new PostCreateRecord
@@ -41,7 +41,7 @@ public sealed class PostJsonAsyncShould : HttpServiceTestsBase
 
 		var options = new HttpCallOptions
 		{
-			PathSegments = new[] { "posts" }
+			PathSegments = { "posts" }
 		};
 
 		var data = new PostCreateRecord

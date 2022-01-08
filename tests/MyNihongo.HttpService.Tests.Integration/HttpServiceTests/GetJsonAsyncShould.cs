@@ -12,7 +12,7 @@ public sealed class GetJsonAsyncShould : HttpServiceTestsBase
 	{
 		var options = new HttpCallOptions
 		{
-			PathSegments = new[] { "users" }
+			PathSegments = { "users" }
 		};
 
 		var result = await CreateFixture()
@@ -28,7 +28,7 @@ public sealed class GetJsonAsyncShould : HttpServiceTestsBase
 
 		var options = new HttpCallOptions
 		{
-			PathSegments = new[] { "users" }
+			PathSegments = { "users" }
 		};
 
 		var result = await CreateFixture()

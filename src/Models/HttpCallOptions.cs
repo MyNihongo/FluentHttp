@@ -1,10 +1,8 @@
-﻿using System.Collections.Immutable;
-
-namespace MyNihongo.HttpService;
+﻿namespace MyNihongo.HttpService;
 
 public sealed record HttpCallOptions
 {
-	public string[] PathSegments { get; init; } = Array.Empty<string>();
+	public List<string> PathSegments { get; } = new();
 
-	public IImmutableDictionary<string, string> Headers { get; init; } = ImmutableDictionary<string, string>.Empty;
+	public Dictionary<string, string> Headers { get; } = new();
 }
