@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyNihongo.FluentHttp.Tests.Unit.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
-public sealed class WithHeaderShould : HttpServiceTestsBase
+public sealed class WithHeaderShould : FluentHttpTestsBase
 {
 	[Fact]
 	public async Task AddSingleHeader()

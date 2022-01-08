@@ -3,18 +3,17 @@ using System.Text;
 using System.Text.Json.Serialization.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MyNihongo.FluentHttp;
 
 namespace MyNihongo.FluentHttp;
 
-internal sealed class DefaultHttpService : IHttpService
+internal sealed class DefaultFluentHttp : IFluentHttp
 {
-	private readonly ILogger<IHttpService> _logger;
+	private readonly ILogger<IFluentHttp> _logger;
 	private readonly IHttpClientFactory _factory;
 	private readonly IConfiguration _configuration;
 
-	public DefaultHttpService(
-		ILogger<IHttpService> logger,
+	public DefaultFluentHttp(
+		ILogger<IFluentHttp> logger,
 		IHttpClientFactory factory,
 		IConfiguration configuration)
 	{

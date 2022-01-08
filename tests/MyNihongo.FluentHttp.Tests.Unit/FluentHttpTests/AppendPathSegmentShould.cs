@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MyNihongo.FluentHttp.Tests.Unit.HttpServiceTests;
+namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
-public sealed class AppendPathSegmentShould : HttpServiceTestsBase
+public sealed class AppendPathSegmentShould : FluentHttpTestsBase
 {
 	[Fact]
 	public async Task AppendSingleSegment()
