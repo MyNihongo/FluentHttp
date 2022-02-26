@@ -1,4 +1,7 @@
-﻿namespace MyNihongo.FluentHttp.Tests.Integration.Models;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
+namespace MyNihongo.FluentHttp.Tests.Integration.Models;
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(UserRecord[]))]
@@ -40,9 +43,11 @@ public sealed record UserRecord
 	public sealed record GeoRecord
 	{
 		[JsonPropertyName("lat")]
+		[JsonProperty("lat")]
 		public string Latitude { get; set; } = string.Empty;
 
 		[JsonPropertyName("lng")]
+		[JsonProperty("lng")]
 		public string Longitude { get; set; } = string.Empty;
 	}
 
@@ -53,6 +58,7 @@ public sealed record UserRecord
 		public string CatchPhrase { get; set; } = string.Empty;
 
 		[JsonPropertyName("bs")]
+		[JsonProperty("bs")]
 		public string BusinessType { get; set; } = string.Empty;
 	}
 }
