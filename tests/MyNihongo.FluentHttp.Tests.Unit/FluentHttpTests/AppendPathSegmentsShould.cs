@@ -8,17 +8,14 @@ public sealed class AppendPathSegmentsShould : FluentHttpTestsBase
 		const string pathSegment1 = nameof(pathSegment1),
 			pathSegment2 = nameof(pathSegment2),
 			pathSegment3 = nameof(pathSegment3);
-		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
 			PathSegments = { pathSegment1, pathSegment2, pathSegment3 }
 		};
 
-		var req = new RequestRecord
-		{
-			Id = 1
-		};
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
 
 		await CreateFixture()
 			.AppendPathSegments(pathSegment1, pathSegment2, pathSegment3)
@@ -34,17 +31,14 @@ public sealed class AppendPathSegmentsShould : FluentHttpTestsBase
 			pathSegment2 = nameof(pathSegment2),
 			pathSegment3 = nameof(pathSegment3),
 			pathSegment4 = nameof(pathSegment4);
-		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
 			PathSegments = { pathSegment1, pathSegment2, pathSegment3, pathSegment4 }
 		};
 
-		var req = new RequestRecord
-		{
-			Id = 1
-		};
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
 
 		await CreateFixture()
 			.AppendPathSegments(pathSegment1, pathSegment2)
