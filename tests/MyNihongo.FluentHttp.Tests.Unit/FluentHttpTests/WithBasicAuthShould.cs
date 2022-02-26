@@ -10,7 +10,7 @@ public sealed class WithBasicAuthShould : FluentHttpTestsBase
 
 		var expectedOptions = new HttpCallOptions
 		{
-			Headers = { { "Authorization", "QmFzaWMgdXNlcm5hbWU6cGFzc3dvcmQ=" } }
+			Headers = { { "Authorization", "Basic dXNlcm5hbWU6cGFzc3dvcmQ=" } }
 		};
 
 		var req = new RequestRecord { Id = 1 };

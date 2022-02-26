@@ -8,7 +8,7 @@ internal static class AuthUtils
 
 	public static HeaderModel BasicAuth(string username, string password)
 	{
-		var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"Basic {username}:{password}"));
-		return new HeaderModel(AuthHeaderKey, value);
+		var value = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{username}:{password}"));
+		return new HeaderModel(AuthHeaderKey, $"Basic {value}");
 	}
 }
