@@ -1,5 +1,4 @@
 ﻿using System.Text.Encodings.Web;
-using System.Text.Json;
 using ApprovalTests;
 
 namespace MyNihongo.FluentHttp.Tests.Integration;

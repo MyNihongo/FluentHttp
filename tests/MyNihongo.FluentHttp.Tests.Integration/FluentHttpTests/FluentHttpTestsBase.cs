@@ -1,9 +1,7 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Core;
-using Serilog.Events;
 
 namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 

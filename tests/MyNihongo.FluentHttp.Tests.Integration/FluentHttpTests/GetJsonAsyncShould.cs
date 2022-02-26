@@ -1,9 +1,4 @@
-﻿using System.Threading.Tasks;
-using MyNihongo.FluentHttp.Tests.Integration.Models;
-using Serilog.Events;
-using Xunit;
-
-namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
+﻿namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 
 public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 {

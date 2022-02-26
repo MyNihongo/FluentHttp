@@ -1,8 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-
-namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
+﻿namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
 public sealed class AppendPathSegmentsShould : FluentHttpTestsBase
 {

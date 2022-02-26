@@ -1,7 +1,4 @@
-﻿using FluentAssertions;
-using Moq;
-
-namespace MyNihongo.FluentHttp.Tests.Unit;
+﻿namespace MyNihongo.FluentHttp.Tests.Unit;
 
 internal static class ItIs
 {

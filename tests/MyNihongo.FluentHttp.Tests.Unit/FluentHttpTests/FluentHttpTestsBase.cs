@@ -1,7 +1,4 @@
-﻿using System.Threading;
-using Moq;
-
-namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
+﻿namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
 public abstract class FluentHttpTestsBase
 {
