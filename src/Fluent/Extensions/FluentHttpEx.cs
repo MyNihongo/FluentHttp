@@ -30,4 +30,10 @@ public static class FluentHttpEx
 				}
 			}
 		};
+
+	public static IFluentHttpWithOptions WithBasicAuth(this IFluentHttp @this, string username, string password)
+	{
+		var (header, value) = AuthUtils.BasicAuth(username, password);
+		return @this.WithHeader(header, value);
+	}
 }
