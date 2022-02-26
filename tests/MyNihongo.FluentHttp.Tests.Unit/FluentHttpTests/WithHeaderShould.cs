@@ -1,8 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-
-namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
+﻿namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
 public sealed class WithHeaderShould : FluentHttpTestsBase
 {
@@ -10,19 +6,39 @@ public sealed class WithHeaderShould : FluentHttpTestsBase
 	public async Task AddSingleHeader()
 	{
 		const string header = nameof(header), value = nameof(value);
-		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
 			Headers = { { header, value } }
 		};
 
-		var req = new RequestRecord
-		{
-			Id = 1
-		};
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
 
 		await CreateFixture()
+			.WithHeader(header, value)
+			.PostJsonAsync<RequestRecord, ResponseRecord>(req, ct: cts.Token);
+
+		VerifyPost(req, expectedOptions, cts.Token);
+	}
+
+	[Fact]
+	public async Task AddSingleHeaderForOptions()
+	{
+		const string header = nameof(header), value = nameof(value),
+			pathSegment = nameof(pathSegment);
+
+		var expectedOptions = new HttpCallOptions
+		{
+			Headers = { { header, value } },
+			PathSegments = { pathSegment }
+		};
+
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
+
+		await CreateFixture()
+			.AppendPathSegment(pathSegment)
 			.WithHeader(header, value)
 			.PostJsonAsync<RequestRecord, ResponseRecord>(req, ct: cts.Token);
 
@@ -34,17 +50,14 @@ public sealed class WithHeaderShould : FluentHttpTestsBase
 	{
 		const string header1 = nameof(header1), value1 = nameof(value1),
 			header2 = nameof(header2), value2 = nameof(value2);
-		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
 			Headers = { { header1, value1 }, { header2, value2 } }
 		};
 
-		var req = new RequestRecord
-		{
-			Id = 1
-		};
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
 
 		await CreateFixture()
 			.WithHeader(header1, value1)

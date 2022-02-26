@@ -1,10 +1,6 @@
-﻿using System.Threading.Tasks;
-using MyNihongo.FluentHttp.Tests.Integration.Models;
-using Serilog.Events;
-using Xunit;
+﻿namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 
-namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
-
+[UsesVerify]
 public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 {
 	[Fact]
@@ -16,9 +12,10 @@ public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 		};
 
 		var result = await CreateFixture()
-			.GetJsonAsync(options, UserRecordContext.Default.UserRecordArray);
+			.GetJsonAsync(options, UserRecordContext.Default.UserRecordArray)
+			.ToJsonStringAsync();
 
-		ApprovalTests.VerifyJson(result);
+		await Verify(result);
 	}
 
 	[Fact]
@@ -32,8 +29,9 @@ public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 		};
 
 		var result = await CreateFixture()
-			.GetJsonAsync(options, UserRecordContext.Default.UserRecordArray);
+			.GetJsonAsync(options, UserRecordContext.Default.UserRecordArray)
+			.ToJsonStringAsync();
 
-		ApprovalTests.VerifyJson(result);
+		await Verify(result);
 	}
 }

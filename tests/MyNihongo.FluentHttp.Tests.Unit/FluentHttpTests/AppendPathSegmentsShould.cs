@@ -1,8 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-
-namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
+﻿namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
 public sealed class AppendPathSegmentsShould : FluentHttpTestsBase
 {
@@ -12,19 +8,42 @@ public sealed class AppendPathSegmentsShould : FluentHttpTestsBase
 		const string pathSegment1 = nameof(pathSegment1),
 			pathSegment2 = nameof(pathSegment2),
 			pathSegment3 = nameof(pathSegment3);
-		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
 			PathSegments = { pathSegment1, pathSegment2, pathSegment3 }
 		};
 
-		var req = new RequestRecord
-		{
-			Id = 1
-		};
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
 
 		await CreateFixture()
+			.AppendPathSegments(pathSegment1, pathSegment2, pathSegment3)
+			.PostJsonAsync<RequestRecord, ResponseRecord>(req, ct: cts.Token);
+
+		VerifyPost(req, expectedOptions, cts.Token);
+	}
+
+	[Fact]
+	public async Task AppendArraySegmentsForOptions()
+	{
+		const string pathSegment1 = nameof(pathSegment1),
+			pathSegment2 = nameof(pathSegment2),
+			pathSegment3 = nameof(pathSegment3),
+			headerKey = nameof(headerKey),
+			headerValue = nameof(headerValue);
+
+		var expectedOptions = new HttpCallOptions
+		{
+			PathSegments = { pathSegment1, pathSegment2, pathSegment3 },
+			Headers = { { headerKey, headerValue } }
+		};
+
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
+
+		await CreateFixture()
+			.WithHeader(headerKey, headerValue)
 			.AppendPathSegments(pathSegment1, pathSegment2, pathSegment3)
 			.PostJsonAsync<RequestRecord, ResponseRecord>(req, ct: cts.Token);
 
@@ -38,17 +57,14 @@ public sealed class AppendPathSegmentsShould : FluentHttpTestsBase
 			pathSegment2 = nameof(pathSegment2),
 			pathSegment3 = nameof(pathSegment3),
 			pathSegment4 = nameof(pathSegment4);
-		using var cts = new CancellationTokenSource(1);
 
 		var expectedOptions = new HttpCallOptions
 		{
 			PathSegments = { pathSegment1, pathSegment2, pathSegment3, pathSegment4 }
 		};
 
-		var req = new RequestRecord
-		{
-			Id = 1
-		};
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
 
 		await CreateFixture()
 			.AppendPathSegments(pathSegment1, pathSegment2)

@@ -32,4 +32,11 @@ public static class FluentHttpWithOptionsEx
 		@this.Options.Headers.Add(header, value);
 		return @this;
 	}
+
+	/// <inheritdoc cref="FluentHttpEx.WithBasicAuth"/>
+	public static IFluentHttpWithOptions WithBasicAuth(this IFluentHttpWithOptions @this, string username, string password)
+	{
+		var (header, value) = AuthUtils.BasicAuth(username, password);
+		return @this.WithHeader(header, value);
+	}
 }

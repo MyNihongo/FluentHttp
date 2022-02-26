@@ -1,11 +1,8 @@
 ﻿using System.Text.Json;
-using System.Threading.Tasks;
-using MyNihongo.FluentHttp.Tests.Integration.Models;
-using Serilog.Events;
-using Xunit;
 
 namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 
+[UsesVerify]
 public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 {
 	[Fact]
@@ -29,9 +26,10 @@ public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 		});
 
 		var result = await CreateFixture()
-			.PostJsonAsync(data, options, PostCreateRecordContext.Default.PostCreateRecord, postContext.PostRecord);
+			.PostJsonAsync(data, options, PostCreateRecordContext.Default.PostCreateRecord, postContext.PostRecord)
+			.ToJsonStringAsync();
 
-		ApprovalTests.VerifyJson(result);
+		await Verify(result);
 	}
 
 	[Fact]
@@ -57,8 +55,9 @@ public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 		});
 
 		var result = await CreateFixture()
-			.PostJsonAsync(data, options, PostCreateRecordContext.Default.PostCreateRecord, postContext.PostRecord);
+			.PostJsonAsync(data, options, PostCreateRecordContext.Default.PostCreateRecord, postContext.PostRecord)
+			.ToJsonStringAsync();
 
-		ApprovalTests.VerifyJson(result);
+		await Verify(result);
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace MyNihongo.FluentHttp.Tests.Integration.Models;
 
@@ -41,20 +42,28 @@ public sealed record UserRecord
 
 	public sealed record GeoRecord
 	{
-		[JsonPropertyName("lat")]
+		private const string LatitudeName = "lat",
+			LongitudeName = "lng";
+
+		[JsonPropertyName(LatitudeName)]
+		[JsonProperty(LatitudeName)]
 		public string Latitude { get; set; } = string.Empty;
 
-		[JsonPropertyName("lng")]
+		[JsonPropertyName(LongitudeName)]
+		[JsonProperty(LongitudeName)]
 		public string Longitude { get; set; } = string.Empty;
 	}
 
 	public sealed record CompanyRecord
 	{
+		private const string BusinessTypeName = "bs";
+
 		public string Name { get; set; } = string.Empty;
 
 		public string CatchPhrase { get; set; } = string.Empty;
 
-		[JsonPropertyName("bs")]
+		[JsonPropertyName(BusinessTypeName)]
+		[JsonProperty(BusinessTypeName)]
 		public string BusinessType { get; set; } = string.Empty;
 	}
 }

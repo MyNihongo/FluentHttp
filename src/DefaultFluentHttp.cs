@@ -89,7 +89,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		var req = new HttpRequestMessage(method, uri);
 
 		foreach (var (key, value) in options.Headers)
-			req.Headers.Add(key, value);
+			req.Headers.TryAddWithoutValidation(key, value);
 
 		return req;
 	}
