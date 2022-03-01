@@ -6,7 +6,7 @@ namespace MyNihongo.FluentHttp;
 
 public static class ServiceCollectionEx
 {
-	public static IServiceCollection AddFluentHttp(this IServiceCollection @this)
+	public static IServiceCollection AddFluentHttp(this IServiceCollection @this, Action<IServiceProvider, HttpClient>? configure = null)
 	{
 		@this
 			.AddHttpClient(Const.FactoryName)
@@ -18,6 +18,8 @@ public static class ServiceCollectionEx
 				var baseAddress = configuration[ConfigKeys.BaseAddress];
 				if (!string.IsNullOrEmpty(baseAddress))
 					http.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
+
+				configure?.Invoke(services, http);
 			})
 			.ConfigurePrimaryHttpMessageHandler(static services =>
 			{
