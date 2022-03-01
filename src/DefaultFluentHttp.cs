@@ -100,8 +100,12 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		var httpClient = _factory.CreateClient(Const.FactoryName);
 		var url = httpClient.BaseAddress.GetAbsoluteUri(req.RequestUri);
 
+		var startTime = DateTime.Now;
+
 		using var res = await httpClient.SendAsync(req, ct)
 			.ConfigureAwait(false);
+
+		_logger.LogDebug("Request time: {RequestTime}", DateTime.Now - startTime);
 
 		await using var stream = await res.Content
 			.ReadAsStreamAsync(ct)
