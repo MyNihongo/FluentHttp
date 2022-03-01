@@ -105,7 +105,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		using var res = await httpClient.SendAsync(req, ct)
 			.ConfigureAwait(false);
 
-		_logger.LogDebug("Request time: {RequestTime}", DateTime.Now - startTime);
+		_logger.LogDebug("{CodeName} ({Code:D}). Request time: {RequestTime}", res.StatusCode, res.StatusCode, DateTime.Now - startTime);
 
 		await using var stream = await res.Content
 			.ReadAsStreamAsync(ct)
