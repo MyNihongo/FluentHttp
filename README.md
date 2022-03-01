@@ -24,7 +24,7 @@ using MyNihongo.FluentHttp;
 
 services.AddFluentHttp();
 
-// Or optionally configer the HTTP client
+// Or optionally configure the HTTP client
 services.AddFluentHttp((services, httpClient) =>
 {
 	// configure
