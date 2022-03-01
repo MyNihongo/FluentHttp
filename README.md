@@ -11,15 +11,24 @@ Add a section to `IConfiguration`
 {
 	"FluentHttp": {
 		"BaseAddress": "https://jsonplaceholder.typicode.com",
-		"NtlmEnabled": false
+		"NtlmEnabled": false,
+		"Timeout": 100
 	} 
 }
 ```
+- `Timeout` in seconds. for `Timeout.Infinite` pass -1.
+
 Register a service
 ```cs
 using MyNihongo.FluentHttp;
 
 services.AddFluentHttp();
+
+// Or optionally configer the HTTP client
+services.AddFluentHttp((services, httpClient) =>
+{
+	// configure
+});
 ```
 
 ## HTTP methods
@@ -89,5 +98,14 @@ Appends a header to the request.
 var result = await fluentHttp
 	.AppendPathSegment("posts")
 	.WithHeader("my-header", "value")
+	.GetJsonAsync<PostRecord>();
+```
+
+#### Basic authentication
+Append the authentication header for the basic authentication
+```cs
+var result = await fluentHttp
+	.AppendPathSegment("posts")
+	.WithBasicAuth("username", "strong password")
 	.GetJsonAsync<PostRecord>();
 ```

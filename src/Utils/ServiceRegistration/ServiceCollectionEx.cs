@@ -6,7 +6,7 @@ namespace MyNihongo.FluentHttp;
 
 public static class ServiceCollectionEx
 {
-	public static IServiceCollection AddFluentHttp(this IServiceCollection @this)
+	public static IServiceCollection AddFluentHttp(this IServiceCollection @this, Action<IServiceProvider, HttpClient>? configure = null)
 	{
 		@this
 			.AddHttpClient(Const.FactoryName)
@@ -15,9 +15,12 @@ public static class ServiceCollectionEx
 				var configuration = services.GetRequiredService<IConfiguration>()
 					.GetSection(ConfigKeys.Section);
 
-				var baseAddress = configuration[ConfigKeys.BaseAddress];
-				if (!string.IsNullOrEmpty(baseAddress))
+				if (configuration.TryGetBaseAddress(out var baseAddress))
 					http.BaseAddress = new Uri(baseAddress, UriKind.Absolute);
+				if (configuration.TryGetTimeout(out var timeout))
+					http.Timeout = timeout;
+
+				configure?.Invoke(services, http);
 			})
 			.ConfigurePrimaryHttpMessageHandler(static services =>
 			{
@@ -35,5 +38,24 @@ public static class ServiceCollectionEx
 			});
 
 		return @this.AddSingleton<IFluentHttp, DefaultFluentHttp>();
+	}
+
+	private static bool TryGetBaseAddress(this IConfiguration configuration, out string value)
+	{
+		value = configuration[ConfigKeys.BaseAddress];
+		return !string.IsNullOrEmpty(value);
+	}
+
+	private static bool TryGetTimeout(this IConfiguration configuration, out TimeSpan value)
+	{
+		value = TimeSpan.Zero;
+		if (!int.TryParse(configuration[ConfigKeys.Timeout], out var timeoutSeconds))
+			return false;
+
+		value = timeoutSeconds != Timeout.Infinite
+			? TimeSpan.FromSeconds(timeoutSeconds)
+			: Timeout.InfiniteTimeSpan;
+
+		return true;
 	}
 }
