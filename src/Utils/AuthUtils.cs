@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace MyNihongo.FluentHttp;
+﻿namespace MyNihongo.FluentHttp;
 
 internal static class AuthUtils
 {
