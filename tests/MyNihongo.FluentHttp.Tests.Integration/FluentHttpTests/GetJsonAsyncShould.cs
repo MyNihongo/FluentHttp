@@ -34,4 +34,20 @@ public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 
 		await Verify(result);
 	}
+
+	[Fact]
+	public async Task GetInvalidModel()
+	{
+		var options = new HttpCallOptions
+		{
+			PathSegments = { "users" }
+		};
+
+		var result = await CreateFixture()
+			.GetJsonOrDefaultAsync(options, PostRecordContext.Default.PostRecord);
+
+		result
+			.Should()
+			.BeNull();
+	}
 }

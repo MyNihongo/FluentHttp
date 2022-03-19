@@ -50,6 +50,9 @@ public sealed record RecordContext
 var models = await fluentHttp
 	.AppendPathSegment("example")
 	.GetJsonAsync(RecordContext.Default.RecordArray, ct);
+
+// When an API may return non-JSON values (e.g. `""`) this method can be used in order to ignore parsing exceptions
+fluentHttp.GetJsonOrDefaultAsync(RecordContext.Default.RecordArray, ct);
 ```
 
 #### PostJsonAsync
@@ -69,6 +72,9 @@ var req = new Request
 var response = await fluentHttp
 	.AppendPathSegment("example")
 	.PostJsonAsync(req, RequestContext.Default.Request, ResponseContext.Default.Response, ct);
+
+// When an API may return non-JSON values (e.g. `""`) this method can be used in order to ignore parsing exceptions
+fluentHttp.PostJsonOrDefaultAsync(req, RequestContext.Default.Request, ResponseContext.Default.Response, ct);
 ```
 
 ## Fluent extensions
