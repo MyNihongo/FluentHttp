@@ -8,9 +8,17 @@ public static class FluentHttpWithOptionsEx
 	public static Task<TResult> GetJsonAsync<TResult>(this IFluentHttpWithOptions @this, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
 		@this.Http.GetJsonAsync(@this.Options, resultTypeInfo, ct);
 
+	/// <inheritdoc cref="IFluentHttp.GetJsonOrDefaultAsync{T}"/>
+	public static Task<TResult?> GetJsonOrDefaultAsync<TResult>(this IFluentHttpWithOptions @this, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
+		@this.Http.GetJsonOrDefaultAsync(@this.Options, resultTypeInfo, ct);
+
 	/// <inheritdoc cref="IFluentHttp.PostJsonAsync{T,T}"/>
 	public static Task<TResult> PostJsonAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
 		@this.Http.PostJsonAsync(source, @this.Options, sourceTypeInfo, resultTypeInfo, ct);
+
+	/// <inheritdoc cref="IFluentHttp.PostJsonOrDefaultAsync{T,T}"/>
+	public static Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
+		@this.Http.PostJsonOrDefaultAsync(source, @this.Options, sourceTypeInfo, resultTypeInfo, ct);
 
 	/// <inheritdoc cref="FluentHttpEx.AppendPathSegment"/>
 	public static IFluentHttpWithOptions AppendPathSegment(this IFluentHttpWithOptions @this, string pathSegment)
