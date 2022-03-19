@@ -30,12 +30,29 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
+	public async Task<TResult?> GetJsonOrDefaultAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
+	{
+		using var req = CreateRequest(HttpMethod.Get, options);
+
+		return await GetResponseOrDefaultAsync(req, resultTypeInfo, ct)
+			.ConfigureAwait(false);
+	}
+
 	public async Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
 	{
 		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, ct)
 			.ConfigureAwait(false);
 
 		return await GetResponseAsync(req, resultTypeInfo, ct)
+			.ConfigureAwait(false);
+	}
+
+	public async Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
+	{
+		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, ct)
+			.ConfigureAwait(false);
+
+		return await GetResponseOrDefaultAsync(req, resultTypeInfo, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -138,5 +155,19 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		}
 
 		throw new HttpCallException(res.StatusCode, errorContent);
+	}
+
+	private async Task<T?> GetResponseOrDefaultAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
+	{
+		try
+		{
+			return await GetResponseAsync(req, jsonTypeInfo, ct)
+				.ConfigureAwait(false);
+		}
+		catch (JsonException e)
+		{
+			_logger.LogWarning("Cannot deserialize JSON: {Message}", e.Message);
+			return default;
+		}
 	}
 }
