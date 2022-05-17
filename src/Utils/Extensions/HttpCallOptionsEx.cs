@@ -7,8 +7,8 @@ internal static class HttpCallOptionsEx
 		var uriString = @this.PathSegments.Join(Const.UriSeparator);
 		if (!string.IsNullOrEmpty(@this.TrailingUrl))
 		{
-			uriString += !@this.TrailingUrl.StartsWith(Const.UriSeparator)
-				? Const.UriSeparator + @this.TrailingUrl
+			uriString += @this.TrailingUrl.StartsWith(Const.UriSeparator)
+				? @this.TrailingUrl[1..]
 				: @this.TrailingUrl;
 		}
 

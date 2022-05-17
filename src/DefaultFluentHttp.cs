@@ -146,7 +146,13 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 		async ValueTask<string> OnSuccessAsync(HttpCallResponse callResponse)
 		{
-			throw new Exception();
+			var fileName = callResponse.Response.GetFileName(options.LocalFileName);
+			await using var fileStream = new FileStream(Path.Combine(options.LocalFolderPath, fileName), FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite, 4096, useAsync: true);
+
+			await callResponse.ResponseStream.CopyToAsync(fileStream, ct)
+				.ConfigureAwait(false);
+
+			return fileStream.Name;
 		}
 	}
 
