@@ -20,6 +20,17 @@ public static class FluentHttpWithOptionsEx
 	public static Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
 		@this.Http.PostJsonOrDefaultAsync(source, @this.Options, sourceTypeInfo, resultTypeInfo, ct);
 
+	/// <inheritdoc cref="IFluentHttp.DownloadFileAsync"/>
+	public static Task<string> DownloadFileAsync(this IFluentHttpWithOptions @this, string localFolderPath, string? localFileName = null, CancellationToken ct = default) =>
+		@this.Http.DownloadFileAsync(localFolderPath, @this.Options, localFileName, ct);
+
+	/// <inheritdoc cref="FluentHttpEx.SetTrailingUrl"/>
+	public static IFluentHttpWithOptions SetTrailingUrl(this IFluentHttpWithOptions @this, string trailingUrl)
+	{
+		@this.Options.TrailingUrl = trailingUrl;
+		return @this;
+	}
+
 	/// <inheritdoc cref="FluentHttpEx.AppendPathSegment"/>
 	public static IFluentHttpWithOptions AppendPathSegment(this IFluentHttpWithOptions @this, string pathSegment)
 	{

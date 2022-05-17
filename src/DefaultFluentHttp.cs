@@ -25,7 +25,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
-		return await GetResponseAsync(req, resultTypeInfo, ct)
+		return await GetJsonResponseAsync(req, resultTypeInfo, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -42,7 +42,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, ct)
 			.ConfigureAwait(false);
 
-		return await GetResponseAsync(req, resultTypeInfo, ct)
+		return await GetJsonResponseAsync(req, resultTypeInfo, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -52,6 +52,15 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 
 		return await GetResponseOrDefaultAsync(req, resultTypeInfo, ct)
+			.ConfigureAwait(false);
+	}
+
+	public async Task<string> DownloadFileAsync(string localFolderPath, HttpCallOptions options, string? localFileName, CancellationToken ct = default)
+	{
+		using var req = CreateRequest(HttpMethod.Get, options);
+		var reqOptions = new HttpDownloadFileOptions(localFolderPath, localFileName);
+
+		return await GetFileResponseAsync(req, reqOptions, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -110,7 +119,33 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		return req;
 	}
 
-	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
+	private Task<T> GetJsonResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
+	{
+		return GetResponseAsync(req, OnSuccessAsync, ct);
+
+		async ValueTask<T> OnSuccessAsync(Stream stream, string url)
+		{
+			if (_logger.IsEnabled(LogLevel.Trace))
+			{
+				var stringData = await stream.ReadToEndAsync()
+					.ConfigureAwait(false);
+
+				_logger.LogTrace("-RESPONSE-\nURL: {Url}\nContent: {Content}", url, stringData);
+
+				return stringData.Deserialize(jsonTypeInfo);
+			}
+
+			return await stream.DeserializeAsync(jsonTypeInfo, ct)
+				.ConfigureAwait(false);
+		}
+	}
+
+	private Task<string> GetFileResponseAsync(HttpRequestMessage req, HttpDownloadFileOptions options, CancellationToken ct)
+	{
+
+	}
+
+	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, Func<Stream, string, ValueTask<T>> onSuccessAsync, CancellationToken ct)
 	{
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
@@ -128,20 +163,8 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 
 		if (res.IsSuccessStatusCode)
-		{
-			if (_logger.IsEnabled(LogLevel.Trace))
-			{
-				var stringData = await stream.ReadToEndAsync()
-					.ConfigureAwait(false);
-
-				_logger.LogTrace("-RESPONSE-\nURL: {Url}\nContent: {Content}", url, stringData);
-
-				return stringData.Deserialize(jsonTypeInfo);
-			}
-
-			return await stream.DeserializeAsync(jsonTypeInfo, ct)
+			return await onSuccessAsync(stream, url)
 				.ConfigureAwait(false);
-		}
 
 		var errorContent = string.Empty;
 
@@ -160,7 +183,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 	{
 		try
 		{
-			return await GetResponseAsync(req, jsonTypeInfo, ct)
+			return await GetJsonResponseAsync(req, jsonTypeInfo, ct)
 				.ConfigureAwait(false);
 		}
 		catch (JsonException e)

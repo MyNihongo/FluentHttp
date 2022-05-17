@@ -23,4 +23,10 @@ public interface IFluentHttp
 	/// </summary>
 	/// <exception cref="HttpCallException"></exception>
 	Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default);
+
+	/// <summary>
+	/// Attempts to download a file
+	/// </summary>
+	/// <exception cref="HttpCallException"></exception>
+	Task<string> DownloadFileAsync(string localFolderPath, HttpCallOptions options, string? localFileName, CancellationToken ct = default);
 }

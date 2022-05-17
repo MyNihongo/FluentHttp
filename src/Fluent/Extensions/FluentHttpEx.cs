@@ -3,6 +3,21 @@
 public static class FluentHttpEx
 {
 	/// <summary>
+	/// Appends <see cref="trailingUrl"/> to the end of the base URI of the HTTP call
+	/// </summary>
+	/// <param name="this"></param>
+	/// <param name="trailingUrl"></param>
+	/// <returns></returns>
+	public static IFluentHttpWithOptions SetTrailingUrl(this IFluentHttp @this, string trailingUrl) =>
+		new FluentHttpWithOptions(@this)
+		{
+			Options = new HttpCallOptions
+			{
+				TrailingUrl = trailingUrl
+			}
+		};
+
+	/// <summary>
 	/// Appends <see cref="pathSegment"/> to the base URI of the HTTP call
 	/// </summary>
 	/// <param name="this">Instance of the HTTP client provider</param>
