@@ -10,9 +10,12 @@ internal static class UriEx
 		if (httpClientUri == null)
 			throw new InvalidOperationException("Base uri is not set for the HTTP client");
 
-		httpClientUri = httpRequestUri != null
-			? new Uri(httpClientUri, httpRequestUri)
-			: httpClientUri;
+		if (httpRequestUri != null)
+		{
+			httpClientUri = httpRequestUri.OriginalString.StartsWith(Const.UriSeparator)
+				? new Uri(httpClientUri, httpRequestUri.OriginalString[1..])
+				: new Uri(httpClientUri, httpRequestUri);
+		}
 
 		return httpClientUri.AbsoluteUri;
 	}

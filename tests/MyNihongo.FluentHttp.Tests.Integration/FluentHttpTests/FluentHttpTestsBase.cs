@@ -10,8 +10,11 @@ public abstract class FluentHttpTestsBase
 	private readonly IServiceProvider _serviceProvider;
 	private readonly LoggingLevelSwitch _loggingLevelSwitch = new(LogEventLevel.Verbose);
 
-	protected FluentHttpTestsBase()
+	protected FluentHttpTestsBase(string? env = null)
 	{
+		if (!string.IsNullOrEmpty(env))
+			env += '.';
+
 		var serilogLogger = new LoggerConfiguration()
 			.Enrich.FromLogContext()
 			.MinimumLevel.ControlledBy(_loggingLevelSwitch)
@@ -20,7 +23,7 @@ public abstract class FluentHttpTestsBase
 
 		var configuration = new ConfigurationBuilder()
 			.SetBasePath(AppContext.BaseDirectory)
-			.AddJsonFile("appsettings.json")
+			.AddJsonFile($"appsettings.{env}json")
 			.Build();
 
 		_serviceProvider = new ServiceCollection()

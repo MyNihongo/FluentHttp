@@ -111,7 +111,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 	private static HttpRequestMessage CreateRequest(in HttpMethod method, in Uri uri, in HttpCallOptions options)
 	{
-		var req = new HttpRequestMessage(method, uri);
+		var req = new HttpRequestMessage(method, uri.OriginalString);
 
 		foreach (var (key, value) in options.Headers)
 			req.Headers.TryAddWithoutValidation(key, value);
@@ -123,29 +123,34 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 	{
 		return GetResponseAsync(req, OnSuccessAsync, ct);
 
-		async ValueTask<T> OnSuccessAsync(Stream stream, string url)
+		async ValueTask<T> OnSuccessAsync(HttpCallResponse callResponse)
 		{
 			if (_logger.IsEnabled(LogLevel.Trace))
 			{
-				var stringData = await stream.ReadToEndAsync()
+				var stringData = await callResponse.ResponseStream.ReadToEndAsync()
 					.ConfigureAwait(false);
 
-				_logger.LogTrace("-RESPONSE-\nURL: {Url}\nContent: {Content}", url, stringData);
+				_logger.LogTrace("-RESPONSE-\nURL: {Url}\nContent: {Content}", callResponse.Url, stringData);
 
 				return stringData.Deserialize(jsonTypeInfo);
 			}
 
-			return await stream.DeserializeAsync(jsonTypeInfo, ct)
+			return await callResponse.ResponseStream.DeserializeAsync(jsonTypeInfo, ct)
 				.ConfigureAwait(false);
 		}
 	}
 
 	private Task<string> GetFileResponseAsync(HttpRequestMessage req, HttpDownloadFileOptions options, CancellationToken ct)
 	{
+		return GetResponseAsync(req, OnSuccessAsync, ct);
 
+		async ValueTask<string> OnSuccessAsync(HttpCallResponse callResponse)
+		{
+			throw new Exception();
+		}
 	}
 
-	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, Func<Stream, string, ValueTask<T>> onSuccessAsync, CancellationToken ct)
+	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, Func<HttpCallResponse, ValueTask<T>> onSuccessAsync, CancellationToken ct)
 	{
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
@@ -163,8 +168,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 
 		if (res.IsSuccessStatusCode)
-			return await onSuccessAsync(stream, url)
+		{
+			var callResponse = new HttpCallResponse(res, stream, url);
+			return await onSuccessAsync(callResponse)
 				.ConfigureAwait(false);
+		}
 
 		var errorContent = string.Empty;
 
