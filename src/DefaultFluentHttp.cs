@@ -61,7 +61,10 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 		if (_logger.IsEnabled(LogLevel.Trace))
 		{
-			var absoluteUrl = _configuration.CreateAbsoluteUrl(uri);
+			var absoluteUrl = !uri.IsAbsoluteUri
+				? _configuration.CreateAbsoluteUrl(uri)
+				: uri.AbsoluteUri;
+
 			_logger.LogTrace("-REQUEST-\nMethod: {Method}\nURL: {Url}", method, absoluteUrl);
 		}
 

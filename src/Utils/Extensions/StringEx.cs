@@ -13,6 +13,11 @@ internal static class StringEx
 			.AppendJoin(separator, @this)
 			.ToString();
 
+	public static string Join(this string @this, IEnumerable<string> values, char separator) =>
+		StringBuilderPool.Get()
+			.AppendJoin(separator, values.Prepend(@this))
+			.ToString();
+
 	public static bool ToBool(this string? @this) =>
 		"true".Equals(@this, StringComparison.OrdinalIgnoreCase);
 

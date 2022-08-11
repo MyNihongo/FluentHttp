@@ -10,7 +10,7 @@ public abstract class FluentHttpTestsBase
 	private readonly IServiceProvider _serviceProvider;
 	private readonly LoggingLevelSwitch _loggingLevelSwitch = new(LogEventLevel.Verbose);
 
-	protected FluentHttpTestsBase()
+	protected FluentHttpTestsBase(bool loadJsonConfiguration = true)
 	{
 		var serilogLogger = new LoggerConfiguration()
 			.Enrich.FromLogContext()
@@ -18,14 +18,11 @@ public abstract class FluentHttpTestsBase
 			.WriteTo.Debug()
 			.CreateLogger();
 
-		var configuration = new ConfigurationBuilder()
-			.SetBasePath(AppContext.BaseDirectory)
-			.AddJsonFile("appsettings.json")
-			.Build();
+		var configuration = GetConfiguration(loadJsonConfiguration);
 
 		_serviceProvider = new ServiceCollection()
 			.AddLogging(x => x.AddSerilog(serilogLogger))
-			.AddSingleton<IConfiguration>(configuration)
+			.AddSingleton(configuration)
 			.AddFluentHttp()
 			.BuildServiceProvider(true);
 	}
@@ -37,4 +34,16 @@ public abstract class FluentHttpTestsBase
 
 	protected IFluentHttp CreateFixture() =>
 		_serviceProvider.GetRequiredService<IFluentHttp>();
+
+	private static IConfiguration GetConfiguration(bool loadJsonConfiguration)
+	{
+		var configurationBuilder = new ConfigurationBuilder()
+			.SetBasePath(AppContext.BaseDirectory);
+
+		if (loadJsonConfiguration)
+			configurationBuilder = configurationBuilder
+				.AddJsonFile("appsettings.json");
+
+		return configurationBuilder.Build();
+	}
 }
