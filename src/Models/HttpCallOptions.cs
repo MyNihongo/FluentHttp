@@ -2,7 +2,7 @@
 
 public sealed record HttpCallOptions
 {
-	public string BaseUrl { get; set; } = string.Empty;
+	public string BaseAddress { get; set; } = string.Empty;
 
 	public List<string> PathSegments { get; } = new();
 
