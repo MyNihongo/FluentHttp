@@ -34,6 +34,17 @@ public static class FluentHttpWithOptionsEx
 		return @this;
 	}
 
+	/// <inheritdoc cref="FluentHttpEx.AppendParameter"/>
+	public static IFluentHttpWithOptions AppendParameter(this IFluentHttpWithOptions @this, string key, object value)
+	{
+		var strValue = value.ToString();
+
+		if (strValue != null)
+			@this.Options.Parameters.Add(key, strValue);
+
+		return @this;
+	}
+
 	/// <inheritdoc cref="FluentHttpEx.WithHeader"/>
 	public static IFluentHttpWithOptions WithHeader(this IFluentHttpWithOptions @this, string header, string value)
 	{

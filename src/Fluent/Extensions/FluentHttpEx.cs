@@ -45,6 +45,29 @@ public static class FluentHttpEx
 	}
 
 	/// <summary>
+	/// Appends a URL parameter with <see cref="key"/> as the name and <see cref="value"/> as its value
+	/// </summary>
+	/// <param name="this">Instance of the HTTP client provider</param>
+	/// <param name="key">Name of the URL parameter</param>
+	/// <param name="value">Value of the URL parameter</param>
+	public static IFluentHttpWithOptions AppendParameter(this IFluentHttp @this, string key, object value)
+	{
+		var result = new FluentHttpWithOptions(@this);
+
+		if (value is not string strValue)
+		{
+			var val = value.ToString();
+			if (val == null)
+				return result;
+
+			strValue = val;
+		}
+
+		result.Options.Parameters.Add(key, strValue);
+		return result;
+	}
+
+	/// <summary>
 	/// Adds the <see cref="header"/> with the <see cref="value"/> to the HTTP call
 	/// </summary>
 	/// <param name="this">Instance of the HTTP client provider</param>
