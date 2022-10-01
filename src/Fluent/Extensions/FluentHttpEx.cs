@@ -50,20 +50,14 @@ public static class FluentHttpEx
 	/// <param name="this">Instance of the HTTP client provider</param>
 	/// <param name="key">Name of the URL parameter</param>
 	/// <param name="value">Value of the URL parameter</param>
-	public static IFluentHttpWithOptions AppendParameter(this IFluentHttp @this, string key, object value)
+	public static IFluentHttpWithOptions AppendParameter(this IFluentHttp @this, string key, object? value)
 	{
 		var result = new FluentHttpWithOptions(@this);
 
-		if (value is not string strValue)
-		{
-			var val = value.ToString();
-			if (val == null)
-				return result;
+		var strValue = value?.ToString();
+		if (strValue != null)
+			result.Options.Parameters.Add(key, strValue);
 
-			strValue = val;
-		}
-
-		result.Options.Parameters.Add(key, strValue);
 		return result;
 	}
 
