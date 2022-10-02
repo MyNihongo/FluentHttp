@@ -3,6 +3,19 @@
 public static class FluentHttpEx
 {
 	/// <summary>
+	/// Configures options of the HTTP call by using <see cref="options"/> function
+	/// </summary>
+	/// <param name="this">Instance of the HTTP client provider</param>
+	/// <param name="options">Methods to configure options of the HTTP call</param>
+	public static IFluentHttpWithOptions SetOptions(this IFluentHttp @this, Action<HttpCallOptions> options)
+	{
+		var result = new FluentHttpWithOptions(@this);
+		options(result.Options);
+
+		return result;
+	}
+
+	/// <summary>
 	/// Sets <see cref="baseAddress"/> as the base address of the HTTP call
 	/// </summary>
 	/// <param name="this">Instance of the HTTP client provider</param>
@@ -40,6 +53,23 @@ public static class FluentHttpEx
 	{
 		var result = new FluentHttpWithOptions(@this);
 		result.Options.PathSegments.AddRange(pathSegments);
+
+		return result;
+	}
+
+	/// <summary>
+	/// Appends a URL parameter with <see cref="key"/> as the name and <see cref="value"/> as its value
+	/// </summary>
+	/// <param name="this">Instance of the HTTP client provider</param>
+	/// <param name="key">Name of the URL parameter</param>
+	/// <param name="value">Value of the URL parameter</param>
+	public static IFluentHttpWithOptions AppendParameter(this IFluentHttp @this, string key, object? value)
+	{
+		var result = new FluentHttpWithOptions(@this);
+
+		var strValue = value?.ToString();
+		if (strValue != null)
+			result.Options.Parameters.Add(key, strValue);
 
 		return result;
 	}

@@ -8,15 +8,13 @@ internal static class StringEx
 	private static readonly ObjectPool<StringBuilder> StringBuilderPool = new DefaultObjectPoolProvider()
 		.CreateStringBuilderPool();
 
-	public static string Join(this IEnumerable<string> @this, char separator) =>
+	public static StringBuilder Join(this IEnumerable<string> @this, char separator) =>
 		StringBuilderPool.Get()
-			.AppendJoin(separator, @this)
-			.ToString();
+			.AppendJoin(separator, @this);
 
-	public static string Join(this string @this, IEnumerable<string> values, char separator) =>
+	public static StringBuilder Join(this string @this, IEnumerable<string> values, char separator) =>
 		StringBuilderPool.Get()
-			.AppendJoin(separator, values.Prepend(@this))
-			.ToString();
+			.AppendJoin(separator, values.Prepend(@this));
 
 	public static bool ToBool(this string? @this) =>
 		"true".Equals(@this, StringComparison.OrdinalIgnoreCase);
