@@ -98,6 +98,16 @@ var result = await fluentHttp
 	.GetJsonAsync<PostCommentRecord>();
 ```
 
+#### AppendParameter
+Appends a URL parameter
+```cs
+// get from https://jsonplaceholder.typicode.com/posts?value=123
+var result = await fluentHttp
+	.AppendPathSegment("posts")
+	.AppendParameter("value", "123")
+	.GetJsonAsync<PostCommentRecord>();
+```
+
 #### WithHeader
 Appends a header to the request.
 ```cs
