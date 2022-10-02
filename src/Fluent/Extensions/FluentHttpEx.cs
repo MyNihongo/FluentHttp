@@ -3,6 +3,19 @@
 public static class FluentHttpEx
 {
 	/// <summary>
+	/// Configures options of the HTTP call by using <see cref="options"/> function
+	/// </summary>
+	/// <param name="this">Instance of the HTTP client provider</param>
+	/// <param name="options">Methods to configure options of the HTTP call</param>
+	public static IFluentHttpWithOptions SetOptions(this IFluentHttp @this, Action<HttpCallOptions> options)
+	{
+		var result = new FluentHttpWithOptions(@this);
+		options(result.Options);
+
+		return result;
+	}
+
+	/// <summary>
 	/// Sets <see cref="baseAddress"/> as the base address of the HTTP call
 	/// </summary>
 	/// <param name="this">Instance of the HTTP client provider</param>

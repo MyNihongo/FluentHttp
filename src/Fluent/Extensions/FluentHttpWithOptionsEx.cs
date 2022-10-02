@@ -20,6 +20,13 @@ public static class FluentHttpWithOptionsEx
 	public static Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
 		@this.Http.PostJsonOrDefaultAsync(source, @this.Options, sourceTypeInfo, resultTypeInfo, ct);
 
+	/// <inheritdoc cref="FluentHttpEx.SetOptions"/>
+	public static IFluentHttpWithOptions SetOptions(this IFluentHttpWithOptions @this, Action<HttpCallOptions> options)
+	{
+		options(@this.Options);
+		return @this;
+	}
+
 	/// <inheritdoc cref="FluentHttpEx.AppendPathSegment"/>
 	public static IFluentHttpWithOptions AppendPathSegment(this IFluentHttpWithOptions @this, string pathSegment)
 	{
