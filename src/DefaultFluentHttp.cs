@@ -127,7 +127,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		_logger.LogDebug("{CodeName} ({Code:D}). Request time: {RequestTime}", res.StatusCode, res.StatusCode, DateTime.Now - startTime);
 
 		await using var stream = await res.Content
+#if NETSTANDARD
+			.ReadAsStreamAsync()
+#else
 			.ReadAsStreamAsync(ct)
+#endif
 			.ConfigureAwait(false);
 
 		if (res.IsSuccessStatusCode)
