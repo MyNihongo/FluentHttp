@@ -15,7 +15,7 @@ internal static class ApprovalTests
 
 	static ApprovalTests()
 	{
-		VerifierSettings.DerivePathInfo((_, projectDirectory, type, method) =>
+		DerivePathInfo((_, projectDirectory, type, method) =>
 		{
 			var basePath = GetExecutionPath(projectDirectory, type);
 			basePath = Path.Combine(basePath, "Approvals");
