@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -40,7 +41,7 @@ public static class ServiceCollectionEx
 		return @this.AddSingleton<IFluentHttp, DefaultFluentHttp>();
 	}
 
-	private static bool TryGetBaseAddress(this IConfiguration configuration, out string value)
+	private static bool TryGetBaseAddress(this IConfiguration configuration, [NotNullWhen(true)] out string? value)
 	{
 		value = configuration[ConfigKeys.BaseAddress];
 		return !string.IsNullOrEmpty(value);
