@@ -34,6 +34,6 @@ internal static class HttpCallOptionsEx
 			}
 		}
 
-		return new Uri(uriStringBuilder.ToString(), uriKind);
+		return new Uri(uriStringBuilder.ToStringAndReturn(), uriKind);
 	}
 }

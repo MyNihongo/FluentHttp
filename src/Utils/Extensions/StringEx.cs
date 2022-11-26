@@ -5,7 +5,7 @@ namespace MyNihongo.FluentHttp;
 
 internal static class StringEx
 {
-	private static readonly ObjectPool<StringBuilder> StringBuilderPool = new DefaultObjectPoolProvider()
+	internal static readonly ObjectPool<StringBuilder> StringBuilderPool = new DefaultObjectPoolProvider()
 		.CreateStringBuilderPool();
 
 	public static StringBuilder Join(this IEnumerable<string> @this, char separator) =>
