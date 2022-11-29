@@ -22,11 +22,11 @@ internal static class StringEx
 	public static bool ToBool(this string? @this) =>
 		"true".Equals(@this, StringComparison.OrdinalIgnoreCase);
 
-	public static T Deserialize<T>(this string @this, JsonTypeInfo<T>? jsonTypeInfo = null)
+	public static T Deserialize<T>(this string @this, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions)
 	{
 		var obj = jsonTypeInfo != null
 			? JsonSerializer.Deserialize(@this, jsonTypeInfo)
-			: JsonSerializer.Deserialize<T>(@this);
+			: JsonSerializer.Deserialize<T>(@this, jsonOptions);
 
 		return obj ?? throw new NullReferenceException("Cannot deserialize");
 	}

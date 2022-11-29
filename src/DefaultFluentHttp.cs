@@ -25,7 +25,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
-		return await GetResponseAsync(req, resultTypeInfo, ct)
+		return await GetResponseAsync(req, resultTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -33,25 +33,25 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
-		return await GetResponseOrDefaultAsync(req, resultTypeInfo, ct)
+		return await GetResponseOrDefaultAsync(req, resultTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 	}
 
 	public async Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
 	{
-		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, ct)
+		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 
-		return await GetResponseAsync(req, resultTypeInfo, ct)
+		return await GetResponseAsync(req, resultTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 	}
 
 	public async Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
 	{
-		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, ct)
+		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 
-		return await GetResponseOrDefaultAsync(req, resultTypeInfo, ct)
+		return await GetResponseOrDefaultAsync(req, resultTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -71,14 +71,14 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		return CreateRequest(method, uri, options);
 	}
 
-	private async Task<HttpRequestMessage> CreateRequestAsync<T>(HttpMethod method, HttpCallOptions options, T data, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
+	private async Task<HttpRequestMessage> CreateRequestAsync<T>(HttpMethod method, HttpCallOptions options, T data, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
 		var uri = options.CreateUri();
 
 		HttpContent content;
 		if (_logger.IsEnabled(LogLevel.Trace))
 		{
-			var stringData = data.Serialize();
+			var stringData = data.Serialize(jsonTypeInfo, jsonOptions);
 			content = new StringContent(stringData);
 
 			var absoluteUrl = _configuration.CreateAbsoluteUrl(uri);
@@ -87,7 +87,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		else
 		{
 			// Do not dispose
-			var stream = await data.SerializeAsync(jsonTypeInfo, ct)
+			var stream = await data.SerializeAsync(jsonTypeInfo, jsonOptions, ct)
 				.ConfigureAwait(false);
 
 			content = new StreamContent(stream);
@@ -113,7 +113,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		return req;
 	}
 
-	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
+	private async Task<T> GetResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
@@ -143,10 +143,10 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 				_logger.LogTrace("-RESPONSE-\nURL: {Url}\nContent: {Content}", url, stringData);
 
-				return stringData.Deserialize(jsonTypeInfo);
+				return stringData.Deserialize(jsonTypeInfo, jsonOptions);
 			}
 
-			return await stream.DeserializeAsync(jsonTypeInfo, ct)
+			return await stream.DeserializeAsync(jsonTypeInfo, jsonOptions, ct)
 				.ConfigureAwait(false);
 		}
 
@@ -163,11 +163,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		throw new HttpCallException(res.StatusCode, errorContent);
 	}
 
-	private async Task<T?> GetResponseOrDefaultAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, CancellationToken ct)
+	private async Task<T?> GetResponseOrDefaultAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
 		try
 		{
-			return await GetResponseAsync(req, jsonTypeInfo, ct)
+			return await GetResponseAsync(req, jsonTypeInfo, jsonOptions, ct)
 				.ConfigureAwait(false);
 		}
 		catch (JsonException e)
