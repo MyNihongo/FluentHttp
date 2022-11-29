@@ -4,13 +4,13 @@ namespace MyNihongo.FluentHttp;
 
 public static class FluentHttpWithOptionsEx
 {
-	/// <inheritdoc cref="IFluentHttp.GetJsonAsync{T}(HttpCallOptions, JsonTypeInfo{T}?, CancellationToken)"/>
-	public static Task<TResult> GetJsonAsync<TResult>(this IFluentHttpWithOptions @this, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
-		@this.Http.GetJsonAsync(@this.Options, resultTypeInfo, ct);
+	/// <inheritdoc cref="IFluentHttp.GetJsonAsync{T}(HttpCallOptions, JsonTypeInfo{T}?, JsonSerializerOptions?, CancellationToken)"/>
+	public static Task<TResult> GetJsonAsync<TResult>(this IFluentHttpWithOptions @this, JsonTypeInfo<TResult>? resultTypeInfo = null, JsonSerializerOptions? jsonOptions = null, CancellationToken ct = default) =>
+		@this.Http.GetJsonAsync(@this.Options, resultTypeInfo, jsonOptions, ct);
 
-	/// <inheritdoc cref="IFluentHttp.GetJsonOrDefaultAsync{T}(HttpCallOptions, JsonTypeInfo{T}?, CancellationToken)"/>
-	public static Task<TResult?> GetJsonOrDefaultAsync<TResult>(this IFluentHttpWithOptions @this, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
-		@this.Http.GetJsonOrDefaultAsync(@this.Options, resultTypeInfo, ct);
+	/// <inheritdoc cref="IFluentHttp.GetJsonOrDefaultAsync{T}(HttpCallOptions, JsonTypeInfo{T}?, JsonSerializerOptions?, CancellationToken)"/>
+	public static Task<TResult?> GetJsonOrDefaultAsync<TResult>(this IFluentHttpWithOptions @this, JsonTypeInfo<TResult>? resultTypeInfo = null, JsonSerializerOptions? jsonOptions = null, CancellationToken ct = default) =>
+		@this.Http.GetJsonOrDefaultAsync(@this.Options, resultTypeInfo, jsonOptions, ct);
 
 	/// <inheritdoc cref="IFluentHttp.PostJsonAsync{T,TT}(T, HttpCallOptions, JsonTypeInfo{T}?, JsonTypeInfo{TT}?, CancellationToken)"/>
 	public static Task<TResult> PostJsonAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
@@ -19,14 +19,6 @@ public static class FluentHttpWithOptionsEx
 	/// <inheritdoc cref="IFluentHttp.PostJsonOrDefaultAsync{T,TT}(T, HttpCallOptions, JsonTypeInfo{T}?, JsonTypeInfo{TT}?, CancellationToken)"/>
 	public static Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
 		@this.Http.PostJsonOrDefaultAsync(source, @this.Options, sourceTypeInfo, resultTypeInfo, ct);
-	
-	/// <inheritdoc cref="IFluentHttp.GetJsonAsync{T}(HttpCallOptions, JsonSerializerOptions, CancellationToken)"/>
-	public static Task<TResult> GetJsonAsync<TResult>(this IFluentHttpWithOptions @this, JsonSerializerOptions jsonOptions, CancellationToken ct = default) =>
-		@this.Http.GetJsonAsync<TResult>(@this.Options, jsonOptions, ct);
-	
-	/// <inheritdoc cref="IFluentHttp.GetJsonOrDefaultAsync{T}(HttpCallOptions, JsonSerializerOptions, CancellationToken)"/>
-	public static Task<TResult?> GetJsonOrDefaultAsync<TResult>(this IFluentHttpWithOptions @this, JsonSerializerOptions jsonOptions, CancellationToken ct = default) =>
-		@this.Http.GetJsonOrDefaultAsync<TResult?>(@this.Options, jsonOptions, ct);
 	
 	/// <inheritdoc cref="IFluentHttp.PostJsonAsync{T,TT}(T, HttpCallOptions, JsonSerializerOptions, CancellationToken)"/>
 	public static Task<TResult> PostJsonAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonSerializerOptions jsonOptions, CancellationToken ct = default) =>

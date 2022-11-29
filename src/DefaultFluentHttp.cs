@@ -21,19 +21,19 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		_configuration = configuration;
 	}
 
-	public async Task<TResult> GetJsonAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
+	public async Task<TResult> GetJsonAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, JsonSerializerOptions? jsonOptions = null, CancellationToken ct = default)
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
-		return await GetResponseAsync(req, resultTypeInfo, jsonOptions: null, ct)
+		return await GetResponseAsync(req, resultTypeInfo, jsonOptions, ct)
 			.ConfigureAwait(false);
 	}
 
-	public async Task<TResult?> GetJsonOrDefaultAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
+	public async Task<TResult?> GetJsonOrDefaultAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, JsonSerializerOptions? jsonOptions = null, CancellationToken ct = default)
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
-		return await GetResponseOrDefaultAsync(req, resultTypeInfo, jsonOptions: null, ct)
+		return await GetResponseOrDefaultAsync(req, resultTypeInfo, jsonOptions, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -52,6 +52,24 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 
 		return await GetResponseOrDefaultAsync(req, resultTypeInfo, jsonOptions: null, ct)
+			.ConfigureAwait(false);
+	}
+
+	public async Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct = default)
+	{
+		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, jsonTypeInfo: null, jsonOptions, ct)
+			.ConfigureAwait(false);
+
+		return await GetResponseAsync<TResult>(req, jsonTypeInfo: null, jsonOptions, ct)
+			.ConfigureAwait(false);
+	}
+
+	public async Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct = default)
+	{
+		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, jsonTypeInfo: null, jsonOptions, ct)
+			.ConfigureAwait(false);
+
+		return await GetResponseOrDefaultAsync<TResult>(req, jsonTypeInfo: null, jsonOptions, ct)
 			.ConfigureAwait(false);
 	}
 

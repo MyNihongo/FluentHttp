@@ -9,13 +9,13 @@ public abstract class FluentHttpTestsBase
 
 	internal void VerifyGet(HttpCallOptions options, CancellationToken ct)
 	{
-		MockFluentHttp.Verify(x => x.GetJsonAsync<ResponseRecord>(ItIs.Equivalent(options), null, ct), Times.Once);
+		MockFluentHttp.Verify(x => x.GetJsonAsync<ResponseRecord>(ItIs.Equivalent(options), null, null, ct), Times.Once);
 		VerifyNoOtherCalls();
 	}
 
 	internal void VerifyGetOrDefault(HttpCallOptions options, CancellationToken ct)
 	{
-		MockFluentHttp.Verify(x => x.GetJsonOrDefaultAsync<ResponseRecord>(ItIs.Equivalent(options), null, ct), Times.Once);
+		MockFluentHttp.Verify(x => x.GetJsonOrDefaultAsync<ResponseRecord>(ItIs.Equivalent(options), null, null, ct), Times.Once);
 		VerifyNoOtherCalls();
 	}
 
