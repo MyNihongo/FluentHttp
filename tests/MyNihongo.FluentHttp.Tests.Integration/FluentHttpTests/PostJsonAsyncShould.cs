@@ -88,4 +88,10 @@ public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 			.Should()
 			.BeNull();
 	}
+
+	[Fact]
+	public async Task PostWithJsonOptions()
+	{
+		throw new NotImplementedException();
+	}
 }

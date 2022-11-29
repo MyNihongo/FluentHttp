@@ -41,4 +41,16 @@ public sealed class PostJsonShould : FluentHttpTestsBase
 
 		VerifyPostOrDefault(req, expectedOptions, cts.Token);
 	}
+
+	[Fact]
+	public async Task PostJsonWithOptions()
+	{
+		throw new NotImplementedException();
+	}
+	
+	[Fact]
+	public async Task PostJsonOrDefaultWithOptions()
+	{
+		throw new NotImplementedException();
+	}
 }

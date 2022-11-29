@@ -50,4 +50,10 @@ public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 			.Should()
 			.BeNull();
 	}
+
+	[Fact]
+	public async Task GetWithJsonOptions()
+	{
+		throw new NotImplementedException();
+	}
 }
