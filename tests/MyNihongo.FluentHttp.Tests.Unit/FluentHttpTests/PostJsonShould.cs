@@ -1,4 +1,6 @@
-﻿namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
+﻿using System.Text.Json;
+
+namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
 public sealed class PostJsonShould : FluentHttpTestsBase
 {
@@ -45,12 +47,50 @@ public sealed class PostJsonShould : FluentHttpTestsBase
 	[Fact]
 	public async Task PostJsonWithOptions()
 	{
-		throw new NotImplementedException();
+		const string pathSegment = nameof(pathSegment);
+
+		var expectedOptions = new HttpCallOptions
+		{
+			PathSegments = { pathSegment }
+		};
+
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
+
+		var jsonOptions = new JsonSerializerOptions
+		{
+			WriteIndented = true
+		};
+
+		await CreateFixture()
+			.AppendPathSegment(pathSegment)
+			.PostJsonAsync<RequestRecord, ResponseRecord>(req, jsonOptions, ct: cts.Token);
+
+		VerifyPost(req, expectedOptions, jsonOptions, cts.Token);
 	}
 	
 	[Fact]
 	public async Task PostJsonOrDefaultWithOptions()
 	{
-		throw new NotImplementedException();
+		const string pathSegment = nameof(pathSegment);
+
+		var expectedOptions = new HttpCallOptions
+		{
+			PathSegments = { pathSegment }
+		};
+
+		var req = new RequestRecord { Id = 1 };
+		using var cts = new CancellationTokenSource();
+
+		var jsonOptions = new JsonSerializerOptions
+		{
+			WriteIndented = true
+		};
+
+		await CreateFixture()
+			.AppendPathSegment(pathSegment)
+			.PostJsonOrDefaultAsync<RequestRecord, ResponseRecord>(req, jsonOptions, ct: cts.Token);
+
+		VerifyPostOrDefault(req, expectedOptions, jsonOptions, cts.Token);
 	}
 }

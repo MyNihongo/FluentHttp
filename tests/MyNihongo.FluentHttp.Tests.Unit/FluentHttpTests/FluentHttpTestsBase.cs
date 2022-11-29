@@ -1,4 +1,6 @@
-﻿namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
+﻿using System.Text.Json;
+
+namespace MyNihongo.FluentHttp.Tests.Unit.FluentHttpTests;
 
 public abstract class FluentHttpTestsBase
 {
@@ -24,10 +26,22 @@ public abstract class FluentHttpTestsBase
 		MockFluentHttp.Verify(x => x.PostJsonAsync<RequestRecord, ResponseRecord>(req, ItIs.Equivalent(options), null, null, ct), Times.Once);
 		VerifyNoOtherCalls();
 	}
+	
+	internal void VerifyPost(RequestRecord req, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct)
+	{
+		MockFluentHttp.Verify(x => x.PostJsonAsync<RequestRecord, ResponseRecord>(req, ItIs.Equivalent(options), jsonOptions, ct), Times.Once);
+		VerifyNoOtherCalls();
+	}
 
 	internal void VerifyPostOrDefault(RequestRecord req, HttpCallOptions options, CancellationToken ct)
 	{
 		MockFluentHttp.Verify(x => x.PostJsonOrDefaultAsync<RequestRecord, ResponseRecord>(req, ItIs.Equivalent(options), null, null, ct), Times.Once);
+		VerifyNoOtherCalls();
+	}
+	
+	internal void VerifyPostOrDefault(RequestRecord req, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct)
+	{
+		MockFluentHttp.Verify(x => x.PostJsonOrDefaultAsync<RequestRecord, ResponseRecord>(req, ItIs.Equivalent(options), jsonOptions, ct), Times.Once);
 		VerifyNoOtherCalls();
 	}
 
