@@ -1,0 +1,6 @@
+﻿{
+	"Id": 101,
+	"UserId": 2,
+	"Title": "Kanji",
+	"Body": "I love kanji more than katakana"
+}
