@@ -1,4 +1,6 @@
-﻿namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
+﻿using System.Text.Json;
+
+namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 
 [UsesVerify]
 public sealed class GetJsonAsyncShould : FluentHttpTestsBase
@@ -49,5 +51,25 @@ public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 		result
 			.Should()
 			.BeNull();
+	}
+
+	[Fact]
+	public async Task GetWithJsonOptions()
+	{
+		var options = new HttpCallOptions
+		{
+			PathSegments = { "users" }
+		};
+
+		var jsonOptions = new JsonSerializerOptions
+		{
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
+
+		var result = await CreateFixture()
+			.GetJsonAsync<UserRecord[]>(options, jsonOptions: jsonOptions)
+			.ToJsonStringAsync();
+
+		await Verify(result);
 	}
 }

@@ -88,4 +88,34 @@ public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 			.Should()
 			.BeNull();
 	}
+
+	[Fact]
+	public async Task PostWithJsonOptions()
+	{
+		LogLevel = LogEventLevel.Information;
+
+		var options = new HttpCallOptions
+		{
+			PathSegments = { "posts" }
+		};
+
+		var data = new PostCreateRecord
+		{
+			UserId = 2,
+			Title = "Kanji",
+			Body = "I love kanji more than katakana"
+		};
+
+		var jsonOptions = new JsonSerializerOptions
+		{
+			PropertyNameCaseInsensitive = true,
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
+
+		var result = await CreateFixture()
+			.PostJsonAsync<PostCreateRecord, PostRecord>(data, options, jsonOptions)
+			.ToJsonStringAsync();
+
+		await Verify(result);
+	}
 }
