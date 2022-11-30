@@ -11,7 +11,7 @@ internal static partial class LoggerEx
 		Message = "-REQUEST-\nMethod: {method}\nURL: {absoluteUrl}",
 		SkipEnabledCheck = true
 	)]
-	public static partial void LogRequest(this ILogger logger, HttpMethod method, string absoluteUrl);
+	public static partial void LogRequest(this ILogger logger, in HttpMethod method, in string absoluteUrl);
 
 	[LoggerMessage(
 		EventId = 2,
@@ -19,7 +19,7 @@ internal static partial class LoggerEx
 		Message = "-REQUEST-\nMethod: {method}\nURL: {absoluteUrl}\nContent: {stringData}",
 		SkipEnabledCheck = true
 	)]
-	public static partial void LogRequest(this ILogger logger, HttpMethod method, string absoluteUrl, string stringData);
+	public static partial void LogRequest(this ILogger logger, in HttpMethod method, in string absoluteUrl, in string stringData);
 
 	[LoggerMessage(
 		EventId = 3,
@@ -27,7 +27,7 @@ internal static partial class LoggerEx
 		Message = "{statusCodeName} ({statusCodeNumber}). Request time: {timeSpan}",
 		SkipEnabledCheck = true
 	)]
-	public static partial void LogRequestTime(this ILogger logger, HttpStatusCode statusCodeName, int statusCodeNumber, TimeSpan timeSpan);
+	public static partial void LogRequestTime(this ILogger logger, in HttpStatusCode statusCodeName, in int statusCodeNumber, in TimeSpan timeSpan);
 
 	[LoggerMessage(
 		EventId = 4,
@@ -35,7 +35,7 @@ internal static partial class LoggerEx
 		Message = "-RESPONSE-\nURL: {absoluteUrl}\nContent: {stringData}",
 		SkipEnabledCheck = true
 	)]
-	public static partial void LogResponse(this ILogger logger, string absoluteUrl, string stringData);
+	public static partial void LogResponse(this ILogger logger, in string absoluteUrl, in string stringData);
 
 	[LoggerMessage(
 		EventId = 5,
@@ -43,7 +43,7 @@ internal static partial class LoggerEx
 		Message = "-RESPONSE ERROR-\nURL: {absoluteUrl}\nContent: {stringData}",
 		SkipEnabledCheck = true
 	)]
-	public static partial void LogResponseError(this ILogger logger, string absoluteUrl, string stringData);
+	public static partial void LogResponseError(this ILogger logger, in string absoluteUrl, in string stringData);
 
 	[LoggerMessage(
 		EventId = 6,
@@ -51,5 +51,5 @@ internal static partial class LoggerEx
 		Message = "Cannot deserialize JSON: {message}",
 		SkipEnabledCheck = true
 	)]
-	public static partial void LogJsonSerializationFailed(this ILogger logger, string message);
+	public static partial void LogJsonSerializationFailed(this ILogger logger, in string message);
 }
