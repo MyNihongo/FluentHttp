@@ -83,7 +83,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 				? _configuration.CreateAbsoluteUrl(uri)
 				: uri.AbsoluteUri;
 
-			_logger.LogTrace("-REQUEST-\nMethod: {Method}\nURL: {Url}", method, absoluteUrl);
+			_logger.LogRequest(method, absoluteUrl);
 		}
 
 		return CreateRequest(method, uri, options);
@@ -100,7 +100,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			content = new StringContent(stringData);
 
 			var absoluteUrl = _configuration.CreateAbsoluteUrl(uri);
-			_logger.LogTrace("-REQUEST-\nMethod: {Method}\nURL: {Url}\nContent: {Content}", method, absoluteUrl, stringData);
+			_logger.LogRequest(method, absoluteUrl, stringData);
 		}
 		else
 		{
@@ -142,7 +142,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		using var res = await httpClient.SendAsync(req, ct)
 			.ConfigureAwait(false);
 
-		_logger.LogDebug("{CodeName} ({Code:D}). Request time: {RequestTime}", res.StatusCode, res.StatusCode, DateTime.Now - startTime);
+		_logger.LogRequestTime(res.StatusCode, (int)res.StatusCode, DateTime.Now - startTime);
 
 		await using var stream = await res.Content
 #if NETSTANDARD
@@ -159,7 +159,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 				var stringData = await stream.ReadToEndAsync()
 					.ConfigureAwait(false);
 
-				_logger.LogTrace("-RESPONSE-\nURL: {Url}\nContent: {Content}", url, stringData);
+				_logger.LogResponse(url, stringData);
 
 				return stringData.Deserialize(jsonTypeInfo, jsonOptions);
 			}
@@ -175,7 +175,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			errorContent = await stream.ReadToEndAsync()
 				.ConfigureAwait(false);
 
-			_logger.LogTrace("-RESPONSE ERROR-\nURL: {Url}\nContent: {Content}", url, errorContent);
+			_logger.LogResponseError(url, errorContent);
 		}
 
 		throw new HttpCallException(res.StatusCode, errorContent);
@@ -190,7 +190,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		}
 		catch (JsonException e)
 		{
-			_logger.LogWarning("Cannot deserialize JSON: {Message}", e.Message);
+			_logger.LogJsonSerializationFailed(e.Message);
 			return default;
 		}
 	}
