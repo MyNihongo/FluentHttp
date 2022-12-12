@@ -133,16 +133,15 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 	private async Task<T> GetJsonResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
-		await using var stream = await GetResponseStreamAsync(req, ct)
+		using var stream = await GetResponseStreamAsync(req, ct)
 			.ConfigureAwait(false);
 
 		if (_logger.IsEnabled(LogLevel.Trace))
 		{
-			var stringData = await stream.ReadToEndAsync()
+			var stringData = await stream.ReadToEndAsync(ct)
 				.ConfigureAwait(false);
 
 			_logger.LogResponse(stream.Url, stringData);
-
 			return stringData.Deserialize(jsonTypeInfo, jsonOptions);
 		}
 
@@ -158,19 +157,16 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 		var startTime = DateTime.Now;
 
-		using var res = await httpClient.SendAsync(req, ct)
+		// Do not dispose
+		var res = await httpClient.SendAsync(req, ct)
 			.ConfigureAwait(false);
 
 		_logger.LogRequestTime(res.StatusCode, (int)res.StatusCode, DateTime.Now - startTime);
 
 		if (res.IsSuccessStatusCode)
-		{
-			var stream = await res.ReadAsStreamAsync(ct)
-				.ConfigureAwait(false);
+			return new UrlStream(res, url);
 
-			return new UrlStream(stream, url);
-		}
-		else
+		using (res)
 		{
 			var errorContent = string.Empty;
 		

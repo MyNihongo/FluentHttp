@@ -6,10 +6,22 @@ namespace MyNihongo.FluentHttp;
 internal static class UrlStreamEx
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static Task<string> ReadToEndAsync(this UrlStream @this) =>
-		@this.Stream.ReadToEndAsync();
+	public static async Task<string> ReadToEndAsync(this UrlStream @this, CancellationToken ct)
+	{
+		await using var stream = await @this.HttpResponseMessage.ReadAsStreamAsync(ct)
+			.ConfigureAwait(false);
+		
+		return await stream.ReadToEndAsync()
+			.ConfigureAwait(false);
+	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static ValueTask<T> DeserializeAsync<T>(this UrlStream @this, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct) =>
-		@this.Stream.DeserializeAsync(jsonTypeInfo, jsonOptions, ct);
+	public static async ValueTask<T> DeserializeAsync<T>(this UrlStream @this, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
+	{
+		await using var stream = await @this.HttpResponseMessage.ReadAsStreamAsync(ct)
+			.ConfigureAwait(false);
+		
+		return await stream.DeserializeAsync(jsonTypeInfo, jsonOptions, ct)
+			.ConfigureAwait(false);
+	}
 }

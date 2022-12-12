@@ -1,20 +1,17 @@
 ﻿namespace MyNihongo.FluentHttp;
 
-internal sealed class UrlStream : IAsyncDisposable, IDisposable
+internal sealed class UrlStream : IDisposable
 {
-	public UrlStream(Stream stream, string url)
+	public UrlStream(HttpResponseMessage httpResponseMessage, string url)
 	{
-		Stream = stream;
+		HttpResponseMessage = httpResponseMessage;
 		Url = url;
 	}
-	
-	public Stream Stream { get; }
+
+	public HttpResponseMessage HttpResponseMessage { get; }
 	
 	public string Url { get; }
 	
 	public void Dispose() =>
-		Stream.Dispose();
-
-	public ValueTask DisposeAsync() =>
-		Stream.DisposeAsync();
+		HttpResponseMessage.Dispose();
 }
