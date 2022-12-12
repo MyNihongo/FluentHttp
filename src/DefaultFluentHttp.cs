@@ -133,6 +133,25 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 	private async Task<T> GetJsonResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
+		await using var stream = await GetResponseStreamAsync(req, ct)
+			.ConfigureAwait(false);
+
+		if (_logger.IsEnabled(LogLevel.Trace))
+		{
+			var stringData = await stream.ReadToEndAsync()
+				.ConfigureAwait(false);
+
+			_logger.LogResponse(stream.Url, stringData);
+
+			return stringData.Deserialize(jsonTypeInfo, jsonOptions);
+		}
+
+		return await stream.DeserializeAsync(jsonTypeInfo, jsonOptions, ct)
+			.ConfigureAwait(false);
+	}
+
+	private async Task<UrlStream> GetResponseStreamAsync(HttpRequestMessage req, CancellationToken ct)
+	{
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
 		var url = httpClient.BaseAddress.GetAbsoluteUri(req.RequestUri);
@@ -144,41 +163,30 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 		_logger.LogRequestTime(res.StatusCode, (int)res.StatusCode, DateTime.Now - startTime);
 
-		await using var stream = await res.Content
-#if NETSTANDARD
-			.ReadAsStreamAsync()
-#else
-			.ReadAsStreamAsync(ct)
-#endif
-			.ConfigureAwait(false);
-
 		if (res.IsSuccessStatusCode)
 		{
-			if (_logger.IsEnabled(LogLevel.Trace))
+			var stream = await res.ReadAsStreamAsync(ct)
+				.ConfigureAwait(false);
+
+			return new UrlStream(stream, url);
+		}
+		else
+		{
+			var errorContent = string.Empty;
+		
+			await using var stream = await res.ReadAsStreamAsync(ct)
+				.ConfigureAwait(false);
+
+			if (stream.Length != 0)
 			{
-				var stringData = await stream.ReadToEndAsync()
+				errorContent = await stream.ReadToEndAsync()
 					.ConfigureAwait(false);
 
-				_logger.LogResponse(url, stringData);
-
-				return stringData.Deserialize(jsonTypeInfo, jsonOptions);
+				_logger.LogResponseError(url, errorContent);
 			}
 
-			return await stream.DeserializeAsync(jsonTypeInfo, jsonOptions, ct)
-				.ConfigureAwait(false);
+			throw new HttpCallException(res.StatusCode, errorContent);	
 		}
-
-		var errorContent = string.Empty;
-
-		if (stream.Length != 0)
-		{
-			errorContent = await stream.ReadToEndAsync()
-				.ConfigureAwait(false);
-
-			_logger.LogResponseError(url, errorContent);
-		}
-
-		throw new HttpCallException(res.StatusCode, errorContent);
 	}
 
 	private async Task<T?> GetJsonResponseOrDefaultAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
