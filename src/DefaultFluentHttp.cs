@@ -171,6 +171,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		await resStream.CopyToAsync(fileStream, ct)
 			.ConfigureAwait(false);
 
+		_logger.LogFileResponse(fileStream.Name, fileStream.Length);
 		return filePath;
 	}
 
