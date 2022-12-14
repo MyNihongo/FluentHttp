@@ -28,6 +28,10 @@ public static class FluentHttpWithOptionsEx
 	public static Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(this IFluentHttpWithOptions @this, TSource source, JsonSerializerOptions jsonOptions, CancellationToken ct = default) =>
 		@this.Http.PostJsonOrDefaultAsync<TSource, TResult>(source, @this.Options, jsonOptions, ct);
 
+	/// <inheritdoc cref="IFluentHttp.DownloadFileAsync"/> 
+	public static Task<string> DownloadFileAsync(this IFluentHttpWithOptions @this, string localFolderPath, string? localFileName = null, CancellationToken ct = default) =>
+		@this.Http.DownloadFileAsync(@this.Options, localFolderPath, localFileName, ct);
+
 	/// <inheritdoc cref="FluentHttpEx.SetOptions"/>
 	public static IFluentHttpWithOptions SetOptions(this IFluentHttpWithOptions @this, Action<HttpCallOptions> options)
 	{

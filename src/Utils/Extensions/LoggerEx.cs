@@ -52,4 +52,11 @@ internal static partial class LoggerEx
 		SkipEnabledCheck = true
 	)]
 	public static partial void LogJsonSerializationFailed(this ILogger logger, in string message);
+
+	[LoggerMessage(
+		EventId = 7,
+		Level = LogLevel.Trace,
+		Message = "-RESPONSE-\nSave path: {path}\nSize (bytes): {size}"
+	)]
+	public static partial void LogFileResponse(this ILogger logger, in string path, in long size);
 }

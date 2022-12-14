@@ -12,7 +12,7 @@ internal static class StreamEx
 			.ConfigureAwait(false);
 	}
 
-	public static async ValueTask<T> DeserializeAsync<T>(this Stream @this, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct = default)
+	public static async ValueTask<T> DeserializeAsync<T>(this Stream @this, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
 		var valueTask = jsonTypeInfo != null
 			? JsonSerializer.DeserializeAsync(@this, jsonTypeInfo, ct)
