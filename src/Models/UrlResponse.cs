@@ -1,8 +1,8 @@
 ﻿namespace MyNihongo.FluentHttp;
 
-internal sealed class UrlStream : IDisposable
+internal sealed class UrlResponse : IDisposable
 {
-	public UrlStream(HttpResponseMessage httpResponseMessage, string url)
+	public UrlResponse(HttpResponseMessage httpResponseMessage, string url)
 	{
 		HttpResponseMessage = httpResponseMessage;
 		Url = url;

@@ -133,23 +133,23 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 	private async Task<T> GetJsonResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
-		using var stream = await GetResponseStreamAsync(req, ct)
+		using var res = await GetResponseAsync(req, ct)
 			.ConfigureAwait(false);
 
 		if (_logger.IsEnabled(LogLevel.Trace))
 		{
-			var stringData = await stream.ReadToEndAsync(ct)
+			var stringData = await res.ReadToEndAsync(ct)
 				.ConfigureAwait(false);
 
-			_logger.LogResponse(stream.Url, stringData);
+			_logger.LogResponse(res.Url, stringData);
 			return stringData.Deserialize(jsonTypeInfo, jsonOptions);
 		}
 
-		return await stream.DeserializeAsync(jsonTypeInfo, jsonOptions, ct)
+		return await res.DeserializeAsync(jsonTypeInfo, jsonOptions, ct)
 			.ConfigureAwait(false);
 	}
 
-	private async Task<UrlStream> GetResponseStreamAsync(HttpRequestMessage req, CancellationToken ct)
+	private async Task<UrlResponse> GetResponseAsync(HttpRequestMessage req, CancellationToken ct)
 	{
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
@@ -164,7 +164,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		_logger.LogRequestTime(res.StatusCode, (int)res.StatusCode, DateTime.Now - startTime);
 
 		if (res.IsSuccessStatusCode)
-			return new UrlStream(res, url);
+			return new UrlResponse(res, url);
 
 		using (res)
 		{

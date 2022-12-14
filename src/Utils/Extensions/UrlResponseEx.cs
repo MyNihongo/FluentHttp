@@ -3,10 +3,10 @@ using System.Text.Json.Serialization.Metadata;
 
 namespace MyNihongo.FluentHttp;
 
-internal static class UrlStreamEx
+internal static class UrlResponseEx
 {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static async Task<string> ReadToEndAsync(this UrlStream @this, CancellationToken ct)
+	public static async Task<string> ReadToEndAsync(this UrlResponse @this, CancellationToken ct)
 	{
 		await using var stream = await @this.HttpResponseMessage.ReadAsStreamAsync(ct)
 			.ConfigureAwait(false);
@@ -16,7 +16,7 @@ internal static class UrlStreamEx
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public static async ValueTask<T> DeserializeAsync<T>(this UrlStream @this, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
+	public static async ValueTask<T> DeserializeAsync<T>(this UrlResponse @this, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
 		await using var stream = await @this.HttpResponseMessage.ReadAsStreamAsync(ct)
 			.ConfigureAwait(false);
