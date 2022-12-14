@@ -73,6 +73,14 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
+	public async Task<UrlResponse> GetResponseAsync(HttpCallOptions options, CancellationToken ct = default)
+	{
+		using var req = CreateRequest(HttpMethod.Get, options);
+
+		return await GetResponseAsync(req, ct)
+			.ConfigureAwait(false);
+	}
+
 	private HttpRequestMessage CreateRequest(HttpMethod method, HttpCallOptions options)
 	{
 		var uri = options.CreateUri();

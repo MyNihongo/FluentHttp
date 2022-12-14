@@ -33,4 +33,7 @@ public interface IFluentHttp
 	/// </summary>
 	/// <exception cref="HttpCallException"></exception>
 	Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct = default);
+
+	/// <exception cref="HttpCallException"></exception>
+	internal Task<UrlResponse> GetResponseAsync(HttpCallOptions options, CancellationToken ct = default);
 }
