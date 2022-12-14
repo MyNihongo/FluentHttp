@@ -34,6 +34,9 @@ public interface IFluentHttp
 	/// <exception cref="HttpCallException"></exception>
 	Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct = default);
 
-	/// <exception cref="HttpCallException"></exception>
-	internal Task<UrlResponse> GetResponseAsync(HttpCallOptions options, CancellationToken ct = default);
+	/// <summary>
+	/// Downloads a file to <see cref="localFolderPath"/>
+	/// </summary>
+	/// <returns>Full path to the downloaded file</returns>
+	Task<string> DownloadFileAsync(HttpCallOptions options, string localFolderPath, string? localFileName = null, CancellationToken ct = default);
 }

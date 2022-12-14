@@ -73,11 +73,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	public async Task<UrlResponse> GetResponseAsync(HttpCallOptions options, CancellationToken ct = default)
+	public async Task<string> DownloadFileAsync(HttpCallOptions options, string localFolderPath, string? localFileName = null, CancellationToken ct = default)
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
-		return await GetResponseAsync(req, ct)
+		return await SaveFileAsync(req, localFolderPath, localFileName, ct)
 			.ConfigureAwait(false);
 	}
 
@@ -155,6 +155,23 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 
 		return await res.DeserializeAsync(jsonTypeInfo, jsonOptions, ct)
 			.ConfigureAwait(false);
+	}
+
+	private async Task<string> SaveFileAsync(HttpRequestMessage req, string localFolderPath, string? localFileName, CancellationToken ct)
+	{
+		using var res = await GetResponseAsync(req, ct)
+			.ConfigureAwait(false);
+
+		await using var resStream = await res.ReadAsStreamAsync(ct)
+			.ConfigureAwait(false);
+
+		var filePath = FileUtils.GetFileResponseFilePath(res, localFolderPath, localFileName);
+		await using var fileStream = FileUtils.AsyncStream(filePath);
+
+		await resStream.CopyToAsync(fileStream, ct)
+			.ConfigureAwait(false);
+
+		return filePath;
 	}
 
 	private async Task<UrlResponse> GetResponseAsync(HttpRequestMessage req, CancellationToken ct)
