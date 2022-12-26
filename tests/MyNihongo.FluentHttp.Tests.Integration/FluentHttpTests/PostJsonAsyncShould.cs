@@ -118,4 +118,54 @@ public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 
 		await Verify(result);
 	}
+	
+	[Fact]
+	public async Task ThrowIfNotFound()
+	{
+		var data = new PostCreateRecord
+		{
+			UserId = 2,
+			Title = "Kanji",
+			Body = "I love kanji more than katakana"
+		};
+
+		var jsonOptions = new JsonSerializerOptions
+		{
+			PropertyNameCaseInsensitive = true,
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
+		
+		var action = async () => await CreateFixture()
+			.AppendPathSegment("not-exists")
+			.PostJsonAsync<PostCreateRecord, PostRecord>(data, jsonOptions);
+
+		await action
+			.Should()
+			.ThrowExactlyAsync<HttpCallException>();
+	}
+
+	[Fact]
+	public async Task ReturnNullIfNotFoundWithTryPost()
+	{
+		var data = new PostCreateRecord
+		{
+			UserId = 2,
+			Title = "Kanji",
+			Body = "I love kanji more than katakana"
+		};
+
+		var jsonOptions = new JsonSerializerOptions
+		{
+			PropertyNameCaseInsensitive = true,
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
+
+		var result = await CreateFixture()
+			.AppendPathSegment("not-exists")
+			.PostJsonOrDefaultAsync<PostCreateRecord, PostRecord>(data, jsonOptions);
+
+		result
+			.Should()
+			.BeNull();
+	}
 }
