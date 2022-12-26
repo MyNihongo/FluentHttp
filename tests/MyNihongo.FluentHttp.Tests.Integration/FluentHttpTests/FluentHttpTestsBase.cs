@@ -15,6 +15,7 @@ public abstract class FluentHttpTestsBase
 		var serilogLogger = new LoggerConfiguration()
 			.Enrich.FromLogContext()
 			.MinimumLevel.ControlledBy(_loggingLevelSwitch)
+			.MinimumLevel.Override("System", LogEventLevel.Warning)
 			.WriteTo.Debug()
 			.CreateLogger();
 

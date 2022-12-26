@@ -1,6 +1,5 @@
 ﻿using System.Net.Http.Headers;
 using System.Text.Json.Serialization.Metadata;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace MyNihongo.FluentHttp;
@@ -9,19 +8,20 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 {
 	private readonly ILogger<IFluentHttp> _logger;
 	private readonly IHttpClientFactory _factory;
-	private readonly IConfiguration _configuration;
 
 	public DefaultFluentHttp(
 		ILogger<IFluentHttp> logger,
-		IHttpClientFactory factory,
-		IConfiguration configuration)
+		IHttpClientFactory factory)
 	{
 		_logger = logger;
 		_factory = factory;
-		_configuration = configuration;
 	}
 
-	public async Task<TResult> GetJsonAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, JsonSerializerOptions? jsonOptions = null, CancellationToken ct = default)
+	public async Task<TResult> GetJsonAsync<TResult>(
+		HttpCallOptions options,
+		JsonTypeInfo<TResult>? resultTypeInfo = null,
+		JsonSerializerOptions? jsonOptions = null,
+		CancellationToken ct = default)
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
@@ -29,7 +29,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	public async Task<TResult?> GetJsonOrDefaultAsync<TResult>(HttpCallOptions options, JsonTypeInfo<TResult>? resultTypeInfo = null, JsonSerializerOptions? jsonOptions = null, CancellationToken ct = default)
+	public async Task<TResult?> GetJsonOrDefaultAsync<TResult>(
+		HttpCallOptions options,
+		JsonTypeInfo<TResult>? resultTypeInfo = null,
+		JsonSerializerOptions? jsonOptions = null,
+		CancellationToken ct = default)
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
@@ -37,25 +41,39 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	public async Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
+	public async Task<TResult> PostJsonAsync<TSource, TResult>(
+		TSource source,
+		HttpCallOptions options,
+		JsonTypeInfo<TSource>? sourceTypeInfo = null,
+		JsonTypeInfo<TResult>? resultTypeInfo = null,
+		CancellationToken ct = default)
 	{
 		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
-			.ConfigureAwait(false);
+				.ConfigureAwait(false);
 
 		return await GetJsonResponseAsync(req, resultTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 	}
 
-	public async Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonTypeInfo<TSource>? sourceTypeInfo = null, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default)
+	public async Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(
+		TSource source,
+		HttpCallOptions options,
+		JsonTypeInfo<TSource>? sourceTypeInfo = null,
+		JsonTypeInfo<TResult>? resultTypeInfo = null,
+		CancellationToken ct = default)
 	{
 		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
-			.ConfigureAwait(false);
+				.ConfigureAwait(false);
 
 		return await GetJsonResponseOrDefaultAsync(req, resultTypeInfo, jsonOptions: null, ct)
 			.ConfigureAwait(false);
 	}
 
-	public async Task<TResult> PostJsonAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct = default)
+	public async Task<TResult> PostJsonAsync<TSource, TResult>(
+		TSource source,
+		HttpCallOptions options,
+		JsonSerializerOptions jsonOptions,
+		CancellationToken ct = default)
 	{
 		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, jsonTypeInfo: null, jsonOptions, ct)
 			.ConfigureAwait(false);
@@ -64,7 +82,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	public async Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(TSource source, HttpCallOptions options, JsonSerializerOptions jsonOptions, CancellationToken ct = default)
+	public async Task<TResult?> PostJsonOrDefaultAsync<TSource, TResult>(
+		TSource source,
+		HttpCallOptions options,
+		JsonSerializerOptions jsonOptions,
+		CancellationToken ct = default)
 	{
 		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, jsonTypeInfo: null, jsonOptions, ct)
 			.ConfigureAwait(false);
@@ -73,7 +95,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	public async Task<string> DownloadFileAsync(HttpCallOptions options, string localFolderPath, string? localFileName = null, CancellationToken ct = default)
+	public async Task<string> DownloadFileAsync(
+		HttpCallOptions options,
+		string localFolderPath,
+		string? localFileName = null,
+		CancellationToken ct = default)
 	{
 		using var req = CreateRequest(HttpMethod.Get, options);
 
@@ -81,34 +107,13 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	private HttpRequestMessage CreateRequest(HttpMethod method, HttpCallOptions options)
-	{
-		var uri = options.CreateUri();
-
-		if (_logger.IsEnabled(LogLevel.Trace))
-		{
-			var absoluteUrl = !uri.IsAbsoluteUri
-				? _configuration.CreateAbsoluteUrl(uri)
-				: uri.AbsoluteUri;
-
-			_logger.LogRequest(method, absoluteUrl);
-		}
-
-		return CreateRequest(method, uri, options);
-	}
-
 	private async Task<HttpRequestMessage> CreateRequestAsync<T>(HttpMethod method, HttpCallOptions options, T data, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
 	{
-		var uri = options.CreateUri();
-
 		HttpContent content;
 		if (_logger.IsEnabled(LogLevel.Trace))
 		{
 			var stringData = data.Serialize(jsonTypeInfo, jsonOptions);
-			content = new StringContent(stringData);
-
-			var absoluteUrl = _configuration.CreateAbsoluteUrl(uri);
-			_logger.LogRequest(method, absoluteUrl, stringData);
+			content = new StringContentExtended(stringData);
 		}
 		else
 		{
@@ -119,7 +124,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			content = new StreamContent(stream);
 		}
 
-		var req = CreateRequest(method, uri, options);
+		var req = CreateRequest(method, options);
 		req.Content = content;
 		req.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json")
 		{
@@ -127,6 +132,12 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		};
 
 		return req;
+	}
+
+	private static HttpRequestMessage CreateRequest(HttpMethod method, HttpCallOptions options)
+	{
+		var uri = options.CreateUri();
+		return CreateRequest(method, uri, options);
 	}
 
 	private static HttpRequestMessage CreateRequest(in HttpMethod method, in Uri uri, in HttpCallOptions options)
@@ -157,7 +168,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	private async Task<string> SaveFileAsync(HttpRequestMessage req, string localFolderPath, string? localFileName, CancellationToken ct)
+	private async Task<string> SaveFileAsync(
+		HttpRequestMessage req,
+		string localFolderPath,
+		string? localFileName,
+		CancellationToken ct)
 	{
 		using var res = await GetResponseAsync(req, ct)
 			.ConfigureAwait(false);
@@ -180,6 +195,16 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
 		var url = httpClient.BaseAddress.GetAbsoluteUri(req.RequestUri);
+		
+		// We log the request here because when a request is created the httpClient is not initialized yet
+		// Therefore, we still don't know the base URL
+		if (_logger.IsEnabled(LogLevel.Trace))
+		{
+			if (req.Content == null)
+				_logger.LogRequest(req.Method, url);
+			else if (req.Content is StringContentExtended stringContent)
+				_logger.LogRequest(req.Method, url, stringContent.Content);
+		}
 
 		var startTime = DateTime.Now;
 
@@ -195,7 +220,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		using (res)
 		{
 			var errorContent = string.Empty;
-		
+
 			await using var stream = await res.ReadAsStreamAsync(ct)
 				.ConfigureAwait(false);
 
@@ -207,11 +232,15 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 				_logger.LogResponseError(url, errorContent);
 			}
 
-			throw new HttpCallException(res.StatusCode, errorContent);	
+			throw new HttpCallException(res.StatusCode, errorContent);
 		}
 	}
 
-	private async Task<T?> GetJsonResponseOrDefaultAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
+	private async Task<T?> GetJsonResponseOrDefaultAsync<T>(
+		HttpRequestMessage req,
+		JsonTypeInfo<T>? jsonTypeInfo,
+		JsonSerializerOptions? jsonOptions,
+		CancellationToken ct)
 	{
 		try
 		{
