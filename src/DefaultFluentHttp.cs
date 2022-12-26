@@ -48,8 +48,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		JsonTypeInfo<TResult>? resultTypeInfo = null,
 		CancellationToken ct = default)
 	{
-		using var req =
-			await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
+		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
 				.ConfigureAwait(false);
 
 		return await GetJsonResponseAsync(req, resultTypeInfo, jsonOptions: null, ct)
@@ -142,19 +141,14 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		return req;
 	}
 
-	private static HttpRequestMessage CreateRequest(HttpMethod method, HttpCallOptions options)
+	private static HttpRequestMessage CreateRequest(in HttpMethod method, in HttpCallOptions options)
 	{
 		var uri = options.CreateUri();
-		return CreateRequest(method, uri, options);
-	}
-
-	private static HttpRequestMessage CreateRequest(in HttpMethod method, in Uri uri, in HttpCallOptions options)
-	{
 		var req = new HttpRequestMessage(method, uri);
-
+		
 		foreach (var (key, value) in options.Headers)
 			req.Headers.TryAddWithoutValidation(key, value);
-
+		
 		return req;
 	}
 
