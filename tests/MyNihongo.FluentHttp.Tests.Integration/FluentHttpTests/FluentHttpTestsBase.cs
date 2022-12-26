@@ -10,12 +10,14 @@ public abstract class FluentHttpTestsBase
 	private readonly IServiceProvider _serviceProvider;
 	private readonly LoggingLevelSwitch _loggingLevelSwitch = new(LogEventLevel.Verbose);
 
-	protected FluentHttpTestsBase(bool loadJsonConfiguration = true)
+	protected FluentHttpTestsBase(ITestOutputHelper testOutputHelper,  bool loadJsonConfiguration = true)
 	{
 		var serilogLogger = new LoggerConfiguration()
 			.Enrich.FromLogContext()
 			.MinimumLevel.ControlledBy(_loggingLevelSwitch)
+			.MinimumLevel.Override("System", LogEventLevel.Warning)
 			.WriteTo.Debug()
+			.WriteTo.TestOutput(testOutputHelper)
 			.CreateLogger();
 
 		var configuration = GetConfiguration(loadJsonConfiguration);
