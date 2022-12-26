@@ -2,6 +2,11 @@
 
 public sealed class DownloadFileAsyncShould : FluentHttpTestsBase
 {
+	public DownloadFileAsyncShould(ITestOutputHelper testOutputHelper)
+		: base(testOutputHelper)
+	{
+	}
+	
 	[Fact]
 	public async Task DownloadFavicon()
 	{

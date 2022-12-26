@@ -5,6 +5,11 @@ namespace MyNihongo.FluentHttp.Tests.Integration.FluentHttpTests;
 [UsesVerify]
 public sealed class PostJsonAsyncShould : FluentHttpTestsBase
 {
+	public PostJsonAsyncShould(ITestOutputHelper testOutputHelper)
+		: base(testOutputHelper)
+	{
+	}
+	
 	[Fact]
 	public async Task PostDataWithVerboseLogging()
 	{

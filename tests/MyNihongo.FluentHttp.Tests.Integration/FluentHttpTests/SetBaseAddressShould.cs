@@ -3,8 +3,8 @@
 [UsesVerify]
 public sealed class SetBaseAddressShould : FluentHttpTestsBase
 {
-	public SetBaseAddressShould()
-		: base(false)
+	public SetBaseAddressShould(ITestOutputHelper testOutputHelper)
+		: base(testOutputHelper, false)
 	{
 	}
 
