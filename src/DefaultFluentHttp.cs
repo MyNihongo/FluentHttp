@@ -48,7 +48,8 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		JsonTypeInfo<TResult>? resultTypeInfo = null,
 		CancellationToken ct = default)
 	{
-		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
+		using var req =
+			await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
 				.ConfigureAwait(false);
 
 		return await GetJsonResponseAsync(req, resultTypeInfo, jsonOptions: null, ct)
@@ -62,7 +63,8 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		JsonTypeInfo<TResult>? resultTypeInfo = null,
 		CancellationToken ct = default)
 	{
-		using var req = await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
+		using var req =
+			await CreateRequestAsync(HttpMethod.Post, options, source, sourceTypeInfo, jsonOptions: null, ct)
 				.ConfigureAwait(false);
 
 		return await GetJsonResponseOrDefaultAsync(req, resultTypeInfo, jsonOptions: null, ct)
@@ -107,7 +109,13 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			.ConfigureAwait(false);
 	}
 
-	private async Task<HttpRequestMessage> CreateRequestAsync<T>(HttpMethod method, HttpCallOptions options, T data, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
+	private async Task<HttpRequestMessage> CreateRequestAsync<T>(
+		HttpMethod method,
+		HttpCallOptions options,
+		T data,
+		JsonTypeInfo<T>? jsonTypeInfo,
+		JsonSerializerOptions? jsonOptions,
+		CancellationToken ct)
 	{
 		HttpContent content;
 		if (_logger.IsEnabled(LogLevel.Trace))
@@ -150,7 +158,11 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		return req;
 	}
 
-	private async Task<T> GetJsonResponseAsync<T>(HttpRequestMessage req, JsonTypeInfo<T>? jsonTypeInfo, JsonSerializerOptions? jsonOptions, CancellationToken ct)
+	private async Task<T> GetJsonResponseAsync<T>(
+		HttpRequestMessage req,
+		JsonTypeInfo<T>? jsonTypeInfo,
+		JsonSerializerOptions? jsonOptions,
+		CancellationToken ct)
 	{
 		using var res = await GetResponseAsync(req, ct)
 			.ConfigureAwait(false);
@@ -195,7 +207,7 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		// Do not dispose
 		var httpClient = _factory.CreateClient(Const.FactoryName);
 		var url = httpClient.BaseAddress.GetAbsoluteUri(req.RequestUri);
-		
+
 		// We log the request here because when a request is created the httpClient is not initialized yet
 		// Therefore, we still don't know the base URL
 		if (_logger.IsEnabled(LogLevel.Trace))
