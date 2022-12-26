@@ -218,9 +218,9 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 			return await GetJsonResponseAsync(req, jsonTypeInfo, jsonOptions, ct)
 				.ConfigureAwait(false);
 		}
-		catch (JsonException e)
+		catch (Exception ex)
 		{
-			_logger.LogJsonSerializationFailed(e.Message);
+			_logger.LogRequestFailed(ex.Message);
 			return default;
 		}
 	}

@@ -48,10 +48,10 @@ internal static partial class LoggerEx
 	[LoggerMessage(
 		EventId = 6,
 		Level = LogLevel.Warning,
-		Message = "Cannot deserialize JSON: {message}",
+		Message = "Request failed: {message}",
 		SkipEnabledCheck = true
 	)]
-	public static partial void LogJsonSerializationFailed(this ILogger logger, in string message);
+	public static partial void LogRequestFailed(this ILogger logger, in string message);
 
 	[LoggerMessage(
 		EventId = 7,
