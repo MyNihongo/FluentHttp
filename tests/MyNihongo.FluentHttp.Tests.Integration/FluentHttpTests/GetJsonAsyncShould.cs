@@ -72,4 +72,40 @@ public sealed class GetJsonAsyncShould : FluentHttpTestsBase
 
 		await Verify(result);
 	}
+	
+	[Fact]
+	public async Task ThrowIfNotFound()
+	{
+		var jsonOptions = new JsonSerializerOptions
+		{
+			PropertyNameCaseInsensitive = true,
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
+		
+		var action = async () => await CreateFixture()
+			.AppendPathSegment("not-exists")
+			.GetJsonAsync<UserRecord>(jsonOptions: jsonOptions);
+
+		await action
+			.Should()
+			.ThrowExactlyAsync<HttpCallException>();
+	}
+	
+	[Fact]
+	public async Task ReturnNullIfNotFoundWithTryGet()
+	{
+		var jsonOptions = new JsonSerializerOptions
+		{
+			PropertyNameCaseInsensitive = true,
+			PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+		};
+
+		var result = await CreateFixture()
+			.AppendPathSegment("not-exists")
+			.GetJsonOrDefaultAsync<UserRecord>(jsonOptions: jsonOptions);
+
+		result
+			.Should()
+			.BeNull();
+	}
 }
