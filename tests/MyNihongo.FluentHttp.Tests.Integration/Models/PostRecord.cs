@@ -8,7 +8,6 @@ internal partial class PostRecordContext : JsonSerializerContext
 {
 }
 
-[JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 [JsonSerializable(typeof(PostCreateRecord))]
 internal partial class PostCreateRecordContext : JsonSerializerContext
 {

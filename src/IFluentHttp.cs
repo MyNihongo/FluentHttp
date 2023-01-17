@@ -39,4 +39,12 @@ public interface IFluentHttp
 	/// </summary>
 	/// <returns>Full path to the downloaded file</returns>
 	Task<string> DownloadFileAsync(HttpCallOptions options, string localFolderPath, string? localFileName = null, CancellationToken ct = default);
+
+	/// <exception cref="HttpCallException"></exception>
+	/// <exception cref="JsonException"></exception>
+	Task<TResult> SendJsonAsync<TResult>(HttpMethod httpMethod, HttpCallOptions options, object? source, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default);
+
+	/// <exception cref="HttpCallException"></exception>
+	/// <exception cref="JsonException"></exception>
+	Task<TResult> SendJsonAsync<TResult>(HttpMethod httpMethod, HttpCallOptions options, object? source, JsonSerializerOptions jsonOptions, CancellationToken ct = default);
 }
