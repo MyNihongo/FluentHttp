@@ -31,6 +31,14 @@ public static class FluentHttpWithOptionsEx
 	/// <inheritdoc cref="IFluentHttp.DownloadFileAsync"/> 
 	public static Task<string> DownloadFileAsync(this IFluentHttpWithOptions @this, string localFolderPath, string? localFileName = null, CancellationToken ct = default) =>
 		@this.Http.DownloadFileAsync(@this.Options, localFolderPath, localFileName, ct);
+	
+	/// <inheritdoc cref="IFluentHttp.SendJsonAsync{T}(HttpMethod, HttpCallOptions, object, JsonTypeInfo{T}?, CancellationToken)"/> 
+	public static Task<TResult> SendJsonAsync<TResult>(this IFluentHttpWithOptions @this, HttpMethod httpMethod, object? source, JsonTypeInfo<TResult>? resultTypeInfo = null, CancellationToken ct = default) =>
+		@this.Http.SendJsonAsync(httpMethod, @this.Options, source, resultTypeInfo, ct);
+	
+	/// <inheritdoc cref="IFluentHttp.SendJsonAsync{T}(HttpMethod, HttpCallOptions, object, JsonSerializerOptions, CancellationToken)"/> 
+	public static Task<TResult> SendJsonAsync<TResult>(this IFluentHttpWithOptions @this, HttpMethod httpMethod, object? source, JsonSerializerOptions jsonOptions, CancellationToken ct = default) =>
+		@this.Http.SendJsonAsync<TResult>(httpMethod, @this.Options, source, jsonOptions, ct);
 
 	/// <inheritdoc cref="FluentHttpEx.SetOptions"/>
 	public static IFluentHttpWithOptions SetOptions(this IFluentHttpWithOptions @this, Action<HttpCallOptions> options)

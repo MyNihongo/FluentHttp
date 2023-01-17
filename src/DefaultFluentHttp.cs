@@ -107,6 +107,34 @@ internal sealed class DefaultFluentHttp : IFluentHttp
 		return await SaveFileAsync(req, localFolderPath, localFileName, ct)
 			.ConfigureAwait(false);
 	}
+	
+	public async Task<TResult> SendJsonAsync<TResult>(
+		HttpMethod httpMethod,
+		HttpCallOptions options,
+		object? source,
+		JsonTypeInfo<TResult>? resultTypeInfo = null,
+		CancellationToken ct = default)
+	{
+		using var req = await CreateRequestAsync(httpMethod, options, source, jsonTypeInfo: null, jsonOptions: null, ct)
+			.ConfigureAwait(false);
+		
+		return await GetJsonResponseAsync(req, resultTypeInfo, jsonOptions: null, ct)
+			.ConfigureAwait(false);
+	}
+
+	public async Task<TResult> SendJsonAsync<TResult>(
+		HttpMethod httpMethod,
+		HttpCallOptions options,
+		object? source,
+		JsonSerializerOptions jsonOptions,
+		CancellationToken ct = default)
+	{
+		using var req = await CreateRequestAsync(httpMethod, options, source, jsonTypeInfo: null, jsonOptions: jsonOptions, ct)
+			.ConfigureAwait(false);
+		
+		return await GetJsonResponseAsync<TResult>(req, jsonTypeInfo: null, jsonOptions, ct)
+			.ConfigureAwait(false);
+	}
 
 	private async Task<HttpRequestMessage> CreateRequestAsync<T>(
 		HttpMethod method,

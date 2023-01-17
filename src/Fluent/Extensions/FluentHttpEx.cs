@@ -29,6 +29,26 @@ public static class FluentHttpEx
 				BaseAddress = baseAddress
 			}
 		};
+	
+	/// <summary>
+	/// Sets <see cref="baseAddress"/> as the base address of the HTTP call
+	/// </summary>
+	/// <param name="this">Instance of the HTTP client provider</param>
+	/// <param name="baseAddress">Base address of the URI</param>
+	/// <returns></returns>
+	public static IFluentHttpWithOptions SetBaseAddress(this IFluentHttp @this, Uri? baseAddress)
+	{
+		if (baseAddress == null)
+			throw new ArgumentNullException(nameof(baseAddress), $"`{nameof(baseAddress)}` is NULL");
+		
+		return new FluentHttpWithOptions(@this)
+		{
+			Options = new HttpCallOptions
+			{
+				BaseAddress = baseAddress.ToString()
+			}
+		};
+	}
 
 	/// <summary>
 	/// Appends <see cref="pathSegment"/> to the base URI of the HTTP call
