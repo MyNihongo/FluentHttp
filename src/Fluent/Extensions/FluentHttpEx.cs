@@ -21,12 +21,12 @@ public static class FluentHttpEx
 	/// <param name="this">Instance of the HTTP client provider</param>
 	/// <param name="baseAddress">Base address of the URI</param>
 	/// <returns></returns>
-	public static IFluentHttpWithOptions SetBaseAddress(this IFluentHttp @this, string baseAddress) =>
+	public static IFluentHttpWithOptions SetBaseAddress(this IFluentHttp @this, string? baseAddress) =>
 		new FluentHttpWithOptions(@this)
 		{
-			Options = new HttpCallOptions
+			Options =
 			{
-				BaseAddress = baseAddress
+				BaseAddress = baseAddress ?? string.Empty
 			}
 		};
 	
@@ -38,14 +38,11 @@ public static class FluentHttpEx
 	/// <returns></returns>
 	public static IFluentHttpWithOptions SetBaseAddress(this IFluentHttp @this, Uri? baseAddress)
 	{
-		if (baseAddress == null)
-			throw new ArgumentNullException(nameof(baseAddress), $"`{nameof(baseAddress)}` is NULL");
-		
 		return new FluentHttpWithOptions(@this)
 		{
-			Options = new HttpCallOptions
+			Options =
 			{
-				BaseAddress = baseAddress.ToString()
+				BaseAddress = baseAddress?.ToString() ?? string.Empty
 			}
 		};
 	}
@@ -58,7 +55,7 @@ public static class FluentHttpEx
 	public static IFluentHttpWithOptions AppendPathSegment(this IFluentHttp @this, string pathSegment) =>
 		new FluentHttpWithOptions(@this)
 		{
-			Options = new HttpCallOptions
+			Options =
 			{
 				PathSegments = { pathSegment }
 			}
@@ -103,7 +100,7 @@ public static class FluentHttpEx
 	public static IFluentHttpWithOptions WithHeader(this IFluentHttp @this, string header, string value) =>
 		new FluentHttpWithOptions(@this)
 		{
-			Options = new HttpCallOptions
+			Options =
 			{
 				Headers =
 				{
