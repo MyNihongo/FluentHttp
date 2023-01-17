@@ -8,7 +8,7 @@
 		<Version>1.1.2</Version>
 		<Authors>MyNihongo</Authors>
 		<Description>Fluent wrapper around IHttpClientFactory</Description>
-		<Copyright>Copyright © 2022 MyNihongo</Copyright>
+		<Copyright>Copyright © 2023 MyNihongo</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/MyNihongo/FluentHttp</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/MyNihongo/FluentHttp</PackageProjectUrl>
